@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSitemapTester.Entities", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSitemapTester.TestApplication", "DSitemapTester.TestApplication\DSitemapTester.TestApplication.csproj", "{0017E091-A06E-4E05-BFDA-5A0D6593FF2C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSitemapTester.DAL.Interfaces", "DSitemapTester.DataAccessInterfaces\DSitemapTester.DAL.Interfaces.csproj", "{DB8179EF-0F55-4A5C-B3E8-ABDF83BF5892}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{0017E091-A06E-4E05-BFDA-5A0D6593FF2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0017E091-A06E-4E05-BFDA-5A0D6593FF2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0017E091-A06E-4E05-BFDA-5A0D6593FF2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB8179EF-0F55-4A5C-B3E8-ABDF83BF5892}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB8179EF-0F55-4A5C-B3E8-ABDF83BF5892}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB8179EF-0F55-4A5C-B3E8-ABDF83BF5892}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB8179EF-0F55-4A5C-B3E8-ABDF83BF5892}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,3 +3,11 @@ D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\bin\Debug\DSitemapTester.BLL
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\obj\Debug\DSitemapTester.BLL.csprojResolveAssemblyReference.cache
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\obj\Debug\DSitemapTester.BLL.dll
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\obj\Debug\DSitemapTester.BLL.pdb
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\bin\Debug\DSitemapTester.DAL.dll
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\bin\Debug\DSitemapTester.Entities.dll
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\bin\Debug\EntityFramework.dll
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\bin\Debug\DSitemapTester.DAL.pdb
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\bin\Debug\DSitemapTester.Entities.pdb
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\bin\Debug\EntityFramework.xml
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\bin\Debug\DSitemapTester.DataAccessInterfaces.dll
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\bin\Debug\DSitemapTester.DataAccessInterfaces.pdb
