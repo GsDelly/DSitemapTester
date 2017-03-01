@@ -1,0 +1,5 @@
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\bin\Debug\DSitemapTester.BLL.dll
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\bin\Debug\DSitemapTester.BLL.pdb
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\obj\Debug\DSitemapTester.BLL.csprojResolveAssemblyReference.cache
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\obj\Debug\DSitemapTester.BLL.dll
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\obj\Debug\DSitemapTester.BLL.pdb

@@ -1,0 +1,5 @@
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.DAL\bin\Debug\DSitemapTester.DAL.dll
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.DAL\bin\Debug\DSitemapTester.DAL.pdb
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.DAL\obj\Debug\DSitemapTester.DAL.csprojResolveAssemblyReference.cache
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.DAL\obj\Debug\DSitemapTester.DAL.dll
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.DAL\obj\Debug\DSitemapTester.DAL.pdb
