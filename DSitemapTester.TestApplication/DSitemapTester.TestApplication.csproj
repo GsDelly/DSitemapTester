@@ -49,6 +49,20 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DSitemapTester.BLL\DSitemapTester.BLL.csproj">
+      <Project>{bf4838f0-36e6-4ce0-a5ad-0cb2c18bb0e2}</Project>
+      <Name>DSitemapTester.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DSitemapTester.DAL\DSitemapTester.DAL.csproj">
+      <Project>{a68adaed-d8d8-494e-a45b-7f731fef82ab}</Project>
+      <Name>DSitemapTester.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DSitemapTester.Entities\DSitemapTester.Entities.csproj">
+      <Project>{a7eac0bc-c653-4173-b566-4b1e70371d48}</Project>
+      <Name>DSitemapTester.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

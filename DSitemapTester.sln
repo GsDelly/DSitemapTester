@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSitemapTester.BLL", "DSite
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSitemapTester.DAL", "DSitemapTester.DAL\DSitemapTester.DAL.csproj", "{A68ADAED-D8D8-494E-A45B-7F731FEF82AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSitemapTester.Entities", "DSitemapTester.Entities\DSitemapTester.Entities.csproj", "{A7EAC0BC-C653-4173-B566-4B1E70371D48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSitemapTester.TestApplication", "DSitemapTester.TestApplication\DSitemapTester.TestApplication.csproj", "{0017E091-A06E-4E05-BFDA-5A0D6593FF2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{A68ADAED-D8D8-494E-A45B-7F731FEF82AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A68ADAED-D8D8-494E-A45B-7F731FEF82AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A68ADAED-D8D8-494E-A45B-7F731FEF82AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7EAC0BC-C653-4173-B566-4B1E70371D48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7EAC0BC-C653-4173-B566-4B1E70371D48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7EAC0BC-C653-4173-B566-4B1E70371D48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7EAC0BC-C653-4173-B566-4B1E70371D48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0017E091-A06E-4E05-BFDA-5A0D6593FF2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0017E091-A06E-4E05-BFDA-5A0D6593FF2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0017E091-A06E-4E05-BFDA-5A0D6593FF2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0017E091-A06E-4E05-BFDA-5A0D6593FF2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
