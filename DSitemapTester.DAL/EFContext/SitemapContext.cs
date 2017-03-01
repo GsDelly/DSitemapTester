@@ -23,10 +23,10 @@ namespace DSitemapTester.DAL.EFContext
 
         public DbSet<WebResource> WebResources { get; set; }
 
-        public DbSet<Test> Tests { get; set; }
+        //public DbSet<Test> Tests { get; set; }
 
-        public DbSet<SitemapResource> SitemapResources { get; set; }
+        //public DbSet<SitemapResource> SitemapResources { get; set; }
 
-        public DbSet<TestResult> TestResults { get; set; }
+        //public DbSet<TestResult> TestResults { get; set; }
     }
 }

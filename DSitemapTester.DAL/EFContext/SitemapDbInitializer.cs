@@ -16,6 +16,10 @@ namespace DSitemapTester.DAL.EFContext
             {
                 Url = "https://google.com",
             };
+            WebResource web1 = new WebResource()
+            {
+                Url = "https://google.com",
+            };
             SitemapResource sitemap1 = new SitemapResource()
             {
                 Url = "https://edu.google.com/",
@@ -98,19 +102,24 @@ namespace DSitemapTester.DAL.EFContext
             test3.TestResults.Add(result6);
 
             web.Tests = new List<Test>();
-            web.Tests.Add(test1);
             web.Tests.Add(test2);
             web.Tests.Add(test3);
 
+            web1.Tests = new List<Test>();
+            web1.Tests.Add(test1);
+
             web.SitemapResources = new List<SitemapResource>();
-            web.SitemapResources.Add(sitemap1);
-            web.SitemapResources.Add(sitemap2);
-            web.SitemapResources.Add(sitemap3);
             web.SitemapResources.Add(sitemap4);
             web.SitemapResources.Add(sitemap5);
             web.SitemapResources.Add(sitemap6);
 
+            web1.SitemapResources = new List<SitemapResource>();
+            web1.SitemapResources.Add(sitemap1);
+            web1.SitemapResources.Add(sitemap2);
+            web1.SitemapResources.Add(sitemap3);
+
             context.WebResources.Add(web);
+            context.WebResources.Add(web1);
 
             context.SaveChanges();
             base.Seed(context);

@@ -14,6 +14,8 @@ namespace DSitemapTester.Entities.Entities
 
         public int TestsCount { get; set; }
 
-        public virtual ICollection<TestResult> TestResults { get; set; }
+        public ICollection<TestResult> TestResults { get; set; }
+
+        public virtual WebResource WebResource { get; set; }
     }
 }

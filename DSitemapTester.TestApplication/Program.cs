@@ -17,6 +17,7 @@ namespace DSitemapTester.TestApplication
             using (IUnitOfWork unit = new EFUnitOfWork(new SitemapContext("SitemapContext")))
             {
                 IEnumerable<WebResource> web = unit.GetRepository<WebResource>().Get();
+                IEnumerable<Test> tests = unit.GetRepository<Test>().Get();
             }
         }
     }
