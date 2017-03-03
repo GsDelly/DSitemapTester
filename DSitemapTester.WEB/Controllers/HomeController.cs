@@ -13,5 +13,12 @@ namespace DSitemapTester.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public ActionResult Checkup()
+        {
+            string selectedUrl = Request["select-url"];
+            return View();
+        }
     }
 }
