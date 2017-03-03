@@ -1,5 +1,4 @@
-﻿using DSitemapTester.App_Start;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
@@ -11,6 +10,7 @@ namespace DSitemapTester
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            AutofacConfig.Configure();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }
