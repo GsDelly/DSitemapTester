@@ -11,11 +11,10 @@ namespace DSitemapTester.App_Start
         {
             bundles.Add(new StyleBundle("~/Content/MainStyles")
                 .Include("~/Content/bootstrap.css")
+                .Include("~/Content/Site.css")
+                .Include("~/Content/icons/*.png")
                 .Include("~/Content/AdminLTE/AdminLTE.css")
-                .Include("~/Content/AdminLTE/skins/skin-blue.css"));
-
-            bundles.Add(new StyleBundle("~/Content/DataTableStyles")
-                .Include("~/Content/DataTables/css/dataTables.bootstrap.css"));
+                .Include("~/Content/AdminLTE/skins/skin-yellow.css"));
 
             bundles.Add(new ScriptBundle("~/Scripts/jquery")
                 .Include("~/Scripts/jquery-{version}.js"));
@@ -27,4 +26,5 @@ namespace DSitemapTester.App_Start
                 .Include("~/Scripts/bootstrap.js")
                 .Include("~/Scripts/AdminLTE/app.js"));
         }
+    }
 }
