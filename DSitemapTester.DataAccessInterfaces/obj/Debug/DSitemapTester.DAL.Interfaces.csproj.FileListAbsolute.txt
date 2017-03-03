@@ -2,3 +2,4 @@ D:\Work\UkadGroup\DSitemapTester\DSitemapTester.DataAccessInterfaces\bin\Debug\D
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.DataAccessInterfaces\bin\Debug\DSitemapTester.DataAccessInterfaces.pdb
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.DataAccessInterfaces\obj\Debug\DSitemapTester.DataAccessInterfaces.dll
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.DataAccessInterfaces\obj\Debug\DSitemapTester.DataAccessInterfaces.pdb
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.DataAccessInterfaces\obj\Debug\DSitemapTester.DAL.Interfaces.csprojResolveAssemblyReference.cache

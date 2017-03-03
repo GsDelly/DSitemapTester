@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DSitemapTester.Tester.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace DSitemapTester.BLL.Interfaces
 {
     public interface ITestService
     {
+        WebResourceDto GetTestResults(string url);
     }
 }
