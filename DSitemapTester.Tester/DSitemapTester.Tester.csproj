@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -40,6 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\Connection\ConnectionInstanceCollection.cs" />
+    <Compile Include="Configuration\Connection\ConnectionInstanceElement.cs" />
+    <Compile Include="Configuration\Connection\ConnectionSection.cs" />
+    <Compile Include="Configuration\Connection\ConnectionSettings.cs" />
     <Compile Include="Dtos\SitemapDto.cs" />
     <Compile Include="Dtos\TestDto.cs" />
     <Compile Include="Dtos\TestResultDto.cs" />
@@ -47,6 +52,7 @@
     <Compile Include="Entities\Sitemap.cs" />
     <Compile Include="Entities\Test.cs" />
     <Compile Include="Entities\TestResult.cs" />
+    <Compile Include="Enums\ConnectionStatus.cs" />
     <Compile Include="Enums\Frequency.cs" />
     <Compile Include="PerformanceAnalyzer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

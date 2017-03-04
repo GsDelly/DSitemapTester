@@ -237,6 +237,10 @@
       <Project>{bf4838f0-36e6-4ce0-a5ad-0cb2c18bb0e2}</Project>
       <Name>DSitemapTester.BLL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DSitemapTester.Tester\DSitemapTester.Tester.csproj">
+      <Project>{069B47FC-4D7D-4EEB-86FD-7981A6A3B482}</Project>
+      <Name>DSitemapTester.Tester</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

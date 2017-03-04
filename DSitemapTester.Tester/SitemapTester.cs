@@ -10,8 +10,15 @@ namespace DSitemapTester.Tester
         {
             SitemapReader reader = new SitemapReader();
             IEnumerable<Sitemap> urls = reader.GetSitemapUrls(url);
+            IList<string> sUrls = new List<string>();
+             
+            foreach (Sitemap sitemapUrl in urls)
+            {
+                sUrls.Add(sitemapUrl.Url);
+            }
 
             PerformanceAnalyzer analyzer = new PerformanceAnalyzer();
+            IEnumerable<Test> test = analyzer.GetConnectionResults(sUrls);
             return null;
         }
     }

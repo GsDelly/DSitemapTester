@@ -22,7 +22,7 @@ namespace DSitemapTester.Tester
 
         private IEnumerable<XElement> GetBottomSitemaps(string url)
         {
-            this.url = url + "/Sitemap.xml";
+            this.url = url + "/sitemap.xml";
             //sitemapTesterUrl = "D://Sitemap.xml";
             ////sitemapTesterUrl = "https://google.com/sitemap.xml";
             ////sitemapTesterUrl = "https://www.google.com/forms/sitemaps.xml";
@@ -84,10 +84,6 @@ namespace DSitemapTester.Tester
 
                 foreach (XElement webPage in sitemap.Elements(xUrl))
                 {
-                    //    string Url { get; set; }
-                    //    DateTime LastModification { get; set; }
-                    //    Frequency Frequency { get; set; }
-                    //    double Priority { get; set; }
                     XName xLoc = XName.Get("loc", sitemap.Name.NamespaceName);
                     XElement locElement = webPage.Element(xLoc);
 
