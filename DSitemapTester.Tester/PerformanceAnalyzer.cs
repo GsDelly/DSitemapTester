@@ -93,6 +93,8 @@ namespace DSitemapTester.Tester
 
                 test = this.GetTestResults(url, testsCount, interval, timeout);
                 test.Url = url;
+                test.TestsCount = testsCount;
+                test.Date = DateTime.Now;
 
                 tests.Add(test);
             }

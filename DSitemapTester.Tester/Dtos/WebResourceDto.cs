@@ -10,8 +10,6 @@ namespace DSitemapTester.Tester.Dtos
     {
         public string Url { get; set; }
 
-        public TestDto Test { get; set; }
-
-        public IEnumerable<SitemapDto> Sitemaps { get; set; }
+        public IEnumerable<TestDto> Tests { get; set; }
     }
 }

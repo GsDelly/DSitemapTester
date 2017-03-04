@@ -67,3 +67,5 @@ D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\DSitemapTester.DataAcces
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\DSitemapTester.Tester.pdb
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\EntityFramework.xml
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\DSitemapTester.Entities.pdb
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\AutoMapper.dll
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\AutoMapper.xml

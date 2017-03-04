@@ -8,6 +8,8 @@ namespace DSitemapTester.Tester.Dtos
 {
     public class TestDto
     {
+        public string Url { get; set; }
+
         public DateTime Date { get; set; }
 
         public int TestsCount { get; set; }

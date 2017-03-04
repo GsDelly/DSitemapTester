@@ -13,7 +13,6 @@ namespace DSitemapTester.Tester
 
         public IEnumerable<Sitemap> GetSitemapUrls(string url)
         {
-            //HttpWebResponse response = this.GetResponse(url);
             IEnumerable<XElement> xSitemaps = this.GetBottomSitemaps(url);
             IEnumerable<Sitemap> sitemaps  = this.GetSitemapEntities(xSitemaps);
 
@@ -23,10 +22,6 @@ namespace DSitemapTester.Tester
         private IEnumerable<XElement> GetBottomSitemaps(string url)
         {
             this.url = url + "/sitemap.xml";
-            //sitemapTesterUrl = "D://Sitemap.xml";
-            ////sitemapTesterUrl = "https://google.com/sitemap.xml";
-            ////sitemapTesterUrl = "https://www.google.com/forms/sitemaps.xml";
-            ////sitemapTesterUrl = "https://www.google.com/slides/sitemaps.xml";
             XElement sitemap = XElement.Load(this.url);
 
             // ... XNames.

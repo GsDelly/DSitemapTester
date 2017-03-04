@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=5.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -41,11 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\Automapper\AutomapperConfig.cs" />
     <Compile Include="Configuration\Connection\ConnectionInstanceCollection.cs" />
     <Compile Include="Configuration\Connection\ConnectionInstanceElement.cs" />
     <Compile Include="Configuration\Connection\ConnectionSection.cs" />
     <Compile Include="Configuration\Connection\ConnectionSettings.cs" />
-    <Compile Include="Dtos\SitemapDto.cs" />
     <Compile Include="Dtos\TestDto.cs" />
     <Compile Include="Dtos\TestResultDto.cs" />
     <Compile Include="Dtos\WebResourceDto.cs" />
@@ -67,6 +71,9 @@
       <Project>{A7EAC0BC-C653-4173-B566-4B1E70371D48}</Project>
       <Name>DSitemapTester.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -10,6 +10,10 @@ namespace DSitemapTester.Tester.Entities
     {
         public string Url { get; set; }
 
+        public DateTime Date { get; set; }
+
+        public int TestsCount { get; set; }
+
         public IEnumerable<TestResult> TestResults { get; set; }
     }
 }

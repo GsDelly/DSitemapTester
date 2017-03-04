@@ -31,3 +31,5 @@ D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\bin\Debug\System.Web.Razor.x
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\bin\Debug\System.Web.WebPages.xml
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\bin\Debug\System.Web.WebPages.Deployment.xml
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\bin\Debug\System.Web.WebPages.Razor.xml
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\bin\Debug\AutoMapper.dll
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.BLL\bin\Debug\AutoMapper.xml
