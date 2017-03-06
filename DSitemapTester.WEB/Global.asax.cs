@@ -11,7 +11,6 @@ namespace DSitemapTester
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            GlobalAutomapperConfig.Configure();
             AutofacConfig.Configure();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }

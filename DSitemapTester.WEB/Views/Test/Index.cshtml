@@ -1,0 +1,44 @@
+﻿@using DSitemapTester.BLL.Dtos;
+
+@model PresentationWebResourceDto
+
+@{
+    ViewBag.Title = "Test";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div>
+    <h2 style="text-align:center">WebResource : @Model.Url</h2>
+    
+    <h4 style="text-align:center">Date: @Model.Tests.First().Date</h4>
+    <h4 style="text-align:center">Test is completed in @Model.Tests.First().Duration seconds</h4>
+
+    <table id="testResults" class="table table-hover table-striped"
+                   cellspacing="0" style="border-collapse:collapse;">
+                <thead style="background: #6495ED; font-size : 16px;">
+                    <tr>
+                        <th scope="col">Url</th>
+                        <th scope="col">Minimal Response Time</th>
+                        <th scope="col">Average Response Time</th>
+                        <th scope="col">Maximal Response Time</th>
+                        <th scope="col">Tests Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (PresentationWebResourceTestDto webResourceTest in Model.Tests)
+                    {
+                        foreach (PresentationTestDto test in webResourceTest.Tests)
+                        {
+                                <tr class="cursor-pointer">
+                                    <td> @Html.DisplayFor(res => test.Url) </td>
+                                    <td> @Html.DisplayFor(res => test.TestResults.ToArray()[0].ResponseTime) </td>
+                                    <td> @Html.DisplayFor(res => test.TestResults.ToArray()[1].ResponseTime) </td>
+                                    <td> @Html.DisplayFor(res => test.TestsCount) </td>
+                                </tr>
+                        }                  
+                    }
+                </tbody>
+    </table>
+</div>
+
+
+

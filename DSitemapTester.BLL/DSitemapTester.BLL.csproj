@@ -80,9 +80,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\GlobalAutomapperConfig.cs" />
-    <Compile Include="Dtos\TestDto.cs" />
-    <Compile Include="Dtos\TestResultDto.cs" />
+    <Compile Include="Configuration\EntitiesAutomapperConfig.cs" />
+    <Compile Include="Configuration\PresentationAutomapperConfig.cs" />
+    <Compile Include="Dtos\PresentationWebResourceDto.cs" />
+    <Compile Include="Dtos\PresentationTestDto.cs" />
+    <Compile Include="Dtos\PresentationTestResultDto.cs" />
+    <Compile Include="Dtos\PresentationWebResourceTestDto.cs" />
     <Compile Include="Interfaces\ITestService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\TestService.cs" />

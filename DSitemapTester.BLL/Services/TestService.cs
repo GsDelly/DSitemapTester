@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DSitemapTester.BLL.Configuration;
+using DSitemapTester.BLL.Dtos;
 using DSitemapTester.BLL.Interfaces;
 using DSitemapTester.DAL.Interfaces;
 using DSitemapTester.Entities.Entities;
@@ -25,20 +26,38 @@ namespace DSitemapTester.BLL.Services
             this.tester = tester;
         }
 
-        public WebResourceDto GetTestResults(string url)
+        public PresentationWebResourceDto GetTestResults(string url)
         {
             WebResourceDto testResults = tester.GetTestResults(url);
+
+            PresentationAutomapperConfig.Configure();
+
+            PresentationWebResourceDto presentationTestResults = new PresentationWebResourceDto()
+            {
+                Tests = new List<PresentationWebResourceTestDto>()
+            };
+
+            presentationTestResults.Url = testResults.Url;
+
+            var a = testResults.Tests.Last().TestResults.Select(obj =>
+                                         new TestResultDto()
+                                         {
+                                             ResponseTime = testResults.Tests.Last().TestResults.Average(resp => resp.ResponseTime)
+                                         }
+                                     ).First();
+
+            presentationTestResults.Tests.Add(Mapper.Map<WebResourceDto, PresentationWebResourceTestDto>(testResults));
+
             this.SaveTestData(testResults);
 
-            return testResults;
+            return presentationTestResults;
         }
 
         public bool SaveTestData(WebResourceDto webResource)
         {
+            EntitiesAutomapperConfig.Configure();
             try
             {
-                GlobalAutomapperConfig.Configure();
-
                 IEnumerable<WebResource> resources = this.dataUnit.GetRepository<WebResource>().Get((x) => x.Url == webResource.Url);
                 WebResource resource;
 
@@ -83,10 +102,8 @@ namespace DSitemapTester.BLL.Services
                             Url = test.Url,
                             WebResource = resource
                         };
-                        //this.dataUnit.GetRepository<SitemapResource>().Insert(sitemap);
                         testEntity.SitemapResource = sitemap;
                     }
-                    //tests.Add(testEntity);
                     webResourceTest.Tests.Add(testEntity);
                 }
                 resource.Tests.Add(webResourceTest);

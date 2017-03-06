@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace DSitemapTester.BLL.Dtos
 {
-    public class TestResultDto
+    public class PresentationWebResourceDto
     {
         public string Url { get; set; }
 
-        public double ResponseTime { get; set; }
+        public ICollection<PresentationWebResourceTestDto> Tests { get; set; }
     }
 }
