@@ -1,6 +1,7 @@
 ﻿using DSitemapTester.Tester.Configuration.Connection;
 using DSitemapTester.Tester.Entities;
 using DSitemapTester.Tester.Enums;
+using DSitemapTester.Tester.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DSitemapTester.Tester
 {
-    public class PerformanceAnalyzer
+    public class PerformanceAnalyzer : IPerformanceAnalyzer
     {
         public IEnumerable<Test> GetConnectionResults(IEnumerable<string> urls)
         {

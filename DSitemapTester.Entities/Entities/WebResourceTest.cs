@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace DSitemapTester.Entities.Entities
 {
-    public class TestResult
+    public class WebResourceTest
     {
         public int Id { get; set; }
 
-        public double ResponseTime { get; set; }
+        public DateTime Date { get; set; }
 
-        public virtual Test Test { get; set; }
+        public TimeSpan Duration { get; set; } 
+
+        public virtual ICollection<Test> Tests { get; set; }
     }
 }

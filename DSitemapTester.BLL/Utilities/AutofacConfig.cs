@@ -4,6 +4,8 @@ using DSitemapTester.BLL.Services;
 using DSitemapTester.DAL.EFContext;
 using DSitemapTester.DAL.Interfaces;
 using DSitemapTester.DAL.Repositories;
+using DSitemapTester.Tester;
+using DSitemapTester.Tester.Interfaces;
 
 namespace DSitemapTester.BLL.Utilities
 {
@@ -16,6 +18,9 @@ namespace DSitemapTester.BLL.Utilities
             builder.RegisterType<EFUnitOfWork>().As<IUnitOfWork>();
             // Services config
             builder.RegisterType<TestService>().As<ITestService>();
+            builder.RegisterType<PerformanceAnalyzer>().As<IPerformanceAnalyzer>();
+            builder.RegisterType<SitemapReader>().As<ISitemapReader>();
+            builder.RegisterType<SitemapTester>().As<ISitemapTester>();
         }
     }
 }

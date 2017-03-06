@@ -2,18 +2,27 @@
 using DSitemapTester.Tester.Configuration.Automapper;
 using DSitemapTester.Tester.Dtos;
 using DSitemapTester.Tester.Entities;
+using DSitemapTester.Tester.Interfaces;
 using System.Collections.Generic;
 
 namespace DSitemapTester.Tester
 {
-    public class SitemapTester
+    public class SitemapTester : ISitemapTester
     {
+        private readonly ISitemapReader reader;
+        private readonly IPerformanceAnalyzer analyzer;
+
+        public SitemapTester(ISitemapReader reader, IPerformanceAnalyzer analyzer)
+        {
+            this.reader = reader;
+            this.analyzer = analyzer;
+        }
+
         public WebResourceDto GetTestResults(string url)
         {
             AutomapperConfig.Configure();
 
-            SitemapReader reader = new SitemapReader();
-            IEnumerable<Sitemap> urls = reader.GetSitemapUrls(url);
+            IEnumerable<Sitemap> urls = this.reader.GetSitemapUrls(url);
            
             IList<string> sUrls = new List<string>();
              
@@ -22,8 +31,7 @@ namespace DSitemapTester.Tester
                 sUrls.Add(sitemapUrl.Url);
             }
 
-            PerformanceAnalyzer analyzer = new PerformanceAnalyzer();
-            IEnumerable<Test> tests = analyzer.GetConnectionResults(sUrls);
+            IEnumerable<Test> tests = this.analyzer.GetConnectionResults(sUrls);
 
             WebResourceDto webResourceDto = new WebResourceDto();
             IList<TestDto> testDto = new List<TestDto>();

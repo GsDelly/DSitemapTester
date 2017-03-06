@@ -1,5 +1,6 @@
 ﻿using DSitemapTester.Tester.Entities;
 using DSitemapTester.Tester.Enums;
+using DSitemapTester.Tester.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Xml.Linq;
 
 namespace DSitemapTester.Tester
 {
-    public class SitemapReader
+    public class SitemapReader : ISitemapReader
     {
         private string url;
 
