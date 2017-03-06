@@ -30,8 +30,9 @@
                         {
                                 <tr class="cursor-pointer">
                                     <td> @Html.DisplayFor(res => test.Url) </td>
-                                    <td> @Html.DisplayFor(res => test.TestResults.ToArray()[0].ResponseTime) </td>
-                                    <td> @Html.DisplayFor(res => test.TestResults.ToArray()[1].ResponseTime) </td>
+                                    <td> @Html.DisplayFor(res => test.MinimalResponseTime.ResponseTime) </td>
+                                    <td> @Html.DisplayFor(res => test.AverageResponseTime.ResponseTime) </td>
+                                    <td> @Html.DisplayFor(res => test.MaximalResponseTime.ResponseTime) </td>
                                     <td> @Html.DisplayFor(res => test.TestsCount) </td>
                                 </tr>
                         }                  

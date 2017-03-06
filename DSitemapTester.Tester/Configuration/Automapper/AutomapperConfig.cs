@@ -15,7 +15,7 @@ namespace DSitemapTester.Tester.Configuration.Automapper
         {
             Mapper.Initialize(config =>
             {
-                config.CreateMap<Test, TestDto>()
+            config.CreateMap<Test, TestDto>()
                 .ForMember(
                          e => e.TestResults,
                          opt => opt.MapFrom(
