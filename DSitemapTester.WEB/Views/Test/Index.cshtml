@@ -6,40 +6,182 @@
     ViewBag.Title = "Test";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Total tests</h3>
+        <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
+        <div id="total-chart"></div>
+    </div>
+</div>
+
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Url Tests</h3>
+        <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
+        <div id="url-chart"></div>
+    </div>
+</div>
+
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Url Tests</h3>
+        <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
+        <div id="url-line-chart"></div>
+    </div>
+</div>
+
 <div>
     <h2 style="text-align:center">WebResource : @Model.Url</h2>
-    
+
     <h4 style="text-align:center">Date: @Model.Tests.First().Date</h4>
     <h4 style="text-align:center">Test is completed in @Model.Tests.First().Duration seconds</h4>
 
     <table id="testResults" class="table table-hover table-striped"
-                   cellspacing="0" style="border-collapse:collapse;">
-                <thead style="background: #6495ED; font-size : 16px;">
-                    <tr>
-                        <th scope="col">Url</th>
-                        <th scope="col">Minimal Response Time</th>
-                        <th scope="col">Average Response Time</th>
-                        <th scope="col">Maximal Response Time</th>
-                        <th scope="col">Tests Count</th>
+           cellspacing="0" style="border-collapse:collapse;">
+        <thead style="background: #6495ED; font-size : 16px;">
+            <tr>
+                <th scope="col">Url</th>
+                <th scope="col">Minimal Response Time</th>
+                <th scope="col">Average Response Time</th>
+                <th scope="col">Maximal Response Time</th>
+                <th scope="col">Tests Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (PresentationWebResourceTestDto webResourceTest in Model.Tests)
+            {
+                foreach (PresentationTestDto test in webResourceTest.Tests)
+                {
+                    <tr class="cursor-pointer">
+                        <td>
+                            @if (test.WrongTestsCount == 0)
+                            {
+                                <img src="~/Content/icons/icon_success.png" />
+                                        @Html.DisplayFor(res => test.Url);
+                            }
+                            else
+                            {
+                                if (test.WrongTestsCount == test.TestsCount)
+                                {
+                                    <img src="~/Content/icons/icon_wrong.png" />
+                                            @Html.DisplayFor(res => test.Url);
+                                }
+                                else
+                                {
+                                    <img src="~/Content/icons/icon_warning.png" />
+                                            @Html.DisplayFor(res => test.Url);
+                                }
+                            }
+                        </td>
+                        <td> @Html.DisplayFor(res => test.MinimalResponseTime.ResponseTime) </td>
+                        <td> @Html.DisplayFor(res => test.AverageResponseTime.ResponseTime) </td>
+                        <td> @Html.DisplayFor(res => test.MaximalResponseTime.ResponseTime) </td>
+                        <td> @Html.DisplayFor(res => test.TestsCount) </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach (PresentationWebResourceTestDto webResourceTest in Model.Tests)
-                    {
-                        foreach (PresentationTestDto test in webResourceTest.Tests)
-                        {
-                                <tr class="cursor-pointer">
-                                    <td> @Html.DisplayFor(res => test.Url) </td>
-                                    <td> @Html.DisplayFor(res => test.MinimalResponseTime.ResponseTime) </td>
-                                    <td> @Html.DisplayFor(res => test.AverageResponseTime.ResponseTime) </td>
-                                    <td> @Html.DisplayFor(res => test.MaximalResponseTime.ResponseTime) </td>
-                                    <td> @Html.DisplayFor(res => test.TestsCount) </td>
-                                </tr>
-                        }                  
-                    }
-                </tbody>
+                }
+            }
+        </tbody>
     </table>
 </div>
+
+@section scripts {
+@Scripts.Render("~/Scripts/GoogleCharts")
+
+<script type="text/javascript">
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawTotalChart);
+    google.charts.setOnLoadCallback(drawUrlChart);
+
+    function drawTotalChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Tests'],
+          ['Successful', @Model.Tests.First().TotalTestsCount - @Model.Tests.First().TotalWrongTestsCount],
+          ['Wrong',  @Model.Tests.First().TotalWrongTestsCount],
+        ]);
+
+        var options = {
+            title: 'Total Tests : ' + @Model.Tests.First().TotalTestsCount,
+            is3D: true,
+            colors: ['green', 'orange']
+            }
+
+        var chart = new google.visualization.PieChart(document.getElementById('total-chart'));
+
+        chart.draw(data, options);
+    }
+    function drawUrlChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Url'],
+          ['Successful', @Model.Tests.First().SuccessfulUrls],
+          ['Wrong', @Model.Tests.First().WrongUrls],
+          ['Warning',  @Model.Tests.First().Tests.Count - (@Model.Tests.First().SuccessfulUrls + @Model.Tests.First().WrongUrls)],
+        ]);
+
+        var options = {
+            title: 'Total Urls : ' + @Model.Tests.First().Tests.Count,
+            is3D: true,
+            colors: ['red', 'blue', 'yellow']
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('url-chart'));
+
+        chart.draw(data, options);
+    }
+</script>
+
+<script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawUrlLineChart);
+
+      function drawUrlLineChart() {
+          var data = new google.visualization.DataTable();
+
+          data.addColumn('string', 'Url');
+          data.addColumn('number', 'Maximal');
+          data.addColumn('number', 'Average');
+          data.addColumn('number', 'Minimum');
+
+          @foreach (PresentationTestDto test in Model.Tests.First().Tests)
+          {
+          <text>
+          @*data.addRow('@test.Url.Split(new string[] { "://" }, StringSplitOptions.None)[1]', @test.MaximalResponseTime.ResponseTime.ToString("0.00"),
+              @test.AverageResponseTime.ResponseTime.ToString("0.00"), @test.MinimalResponseTime.ResponseTime.ToString("0.00"));*@
+          data.addRow('@test.Url.Split(new string[] { "://" }, StringSplitOptions.None)[1]', 2.11, 2.33, 2.23);
+          </text>
+          };
+
+        var options = {
+            title: 'Url Performance',
+            curveType: 'function',
+            legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('url-line-chart'));
+
+        chart.draw(data, options);
+      }
+</script>
+
+}
+
+
+
+
 
 
 

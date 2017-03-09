@@ -10,7 +10,6 @@ namespace DSitemapTester.BLL.Dtos
     public class PresentationTestResultDto
     {
         [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true)]
-
         public double ResponseTime { get; set; }
     }
 }

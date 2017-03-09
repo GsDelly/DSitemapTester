@@ -11,15 +11,18 @@ namespace DSitemapTester.Controllers
     public class TestController : Controller
     {
         private ITestService testService;
+        //private IChartService chartService;
 
         public TestController(ITestService testService)
         {
             this.testService = testService;
+            //this.chartService = chartService;
         }
         // GET: Test
         public ActionResult Index(string selectedUrl)
         {
-            PresentationWebResourceDto webResource = testService.GetTestResults(selectedUrl);
+            PresentationWebResourceDto webResource = this.testService.GetTestResults(selectedUrl);
+            //this.chartService.GetChartPie(webResource);
 
             return View(webResource);
         }

@@ -60,7 +60,11 @@ namespace DSitemapTester.BLL.Configuration
                                          {
                                              ResponseTime = pres.TestResults.Average(resp => resp.ResponseTime)
                                          }
-                                     ).First()));
+                                     ).First()))
+                .ForMember(
+                         e => e.WrongTestsCount,
+                         opt => opt.MapFrom(
+                             res => res.TestResults.Where(test => test.ResponseTime == 0).Count()));
 
                 config.CreateMap<TestResultDto, PresentationTestResultDto>()
                 .ForMember(

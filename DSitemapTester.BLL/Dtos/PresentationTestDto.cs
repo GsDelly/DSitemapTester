@@ -10,6 +10,8 @@ namespace DSitemapTester.BLL.Dtos
     {
         public string Url { get; set; }
 
+        public int WrongTestsCount { get; set; }
+
         public int TestsCount { get; set; }
 
         public PresentationTestResultDto MinimalResponseTime { get; set; }

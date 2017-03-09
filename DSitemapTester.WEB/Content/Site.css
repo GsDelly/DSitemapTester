@@ -42,4 +42,7 @@ hr:before {
   border-radius: 20px; 
 }
 
+.canvasjs-chart-credit {
+   display: none;
+}
 

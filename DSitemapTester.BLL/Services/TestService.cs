@@ -2,6 +2,7 @@
 using DSitemapTester.BLL.Configuration;
 using DSitemapTester.BLL.Dtos;
 using DSitemapTester.BLL.Interfaces;
+using DSitemapTester.BLL.Utilities;
 using DSitemapTester.DAL.Interfaces;
 using DSitemapTester.Entities.Entities;
 using DSitemapTester.Tester;
@@ -28,6 +29,8 @@ namespace DSitemapTester.BLL.Services
 
         public PresentationWebResourceDto GetTestResults(string url)
         {
+            url = UrlAdaptor.GetUrl(url); 
+
             WebResourceDto testResults = tester.GetTestResults(url);
 
             PresentationAutomapperConfig.Configure();
@@ -39,14 +42,15 @@ namespace DSitemapTester.BLL.Services
 
             presentationTestResults.Url = testResults.Url;
 
-            var a = testResults.Tests.Last().TestResults.Select(obj =>
-                                         new TestResultDto()
-                                         {
-                                             ResponseTime = testResults.Tests.Last().TestResults.Average(resp => resp.ResponseTime)
-                                         }
-                                     ).First();
-
             presentationTestResults.Tests.Add(Mapper.Map<WebResourceDto, PresentationWebResourceTestDto>(testResults));
+
+            foreach (PresentationWebResourceTestDto test in presentationTestResults.Tests)
+            {
+                test.TotalTestsCount = test.Tests.Sum(res => res.TestsCount);
+                test.TotalWrongTestsCount = test.Tests.Sum(res => res.WrongTestsCount);
+                test.WrongUrls = test.Tests.Where(res => res.WrongTestsCount == res.TestsCount).Count();
+                test.SuccessfulUrls = test.Tests.Where(res => res.WrongTestsCount == 0).Count();
+            }
 
             this.SaveTestData(testResults);
 
