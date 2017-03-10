@@ -50,6 +50,7 @@ namespace DSitemapTester.BLL.Services
                 test.TotalWrongTestsCount = test.Tests.Sum(res => res.WrongTestsCount);
                 test.WrongUrls = test.Tests.Where(res => res.WrongTestsCount == res.TestsCount).Count();
                 test.SuccessfulUrls = test.Tests.Where(res => res.WrongTestsCount == 0).Count();
+                test.Tests = test.Tests.OrderByDescending(res => res.AverageResponseTime.ResponseTime).ToList();
             }
 
             this.SaveTestData(testResults);

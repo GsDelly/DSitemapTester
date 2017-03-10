@@ -87,10 +87,8 @@
     <Compile Include="Dtos\PresentationTestDto.cs" />
     <Compile Include="Dtos\PresentationTestResultDto.cs" />
     <Compile Include="Dtos\PresentationWebResourceTestDto.cs" />
-    <Compile Include="Interfaces\IChartService.cs" />
     <Compile Include="Interfaces\ITestService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\ChartService.cs" />
     <Compile Include="Services\TestService.cs" />
     <Compile Include="Utilities\AutofacConfig.cs" />
     <Compile Include="Utilities\UrlAdaptor.cs" />

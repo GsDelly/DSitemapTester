@@ -41,8 +41,10 @@ hr:before {
   border-width: 0 0 1px 0; 
   border-radius: 20px; 
 }
-
-.canvasjs-chart-credit {
-   display: none;
+table{
+   border: 3px solid black;
 }
-
+th {
+   background: #f7c255; 
+   font-size : 16px; 
+}
