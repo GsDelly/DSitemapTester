@@ -12,6 +12,6 @@ namespace DSitemapTester.Entities.Entities
 
         public string Url { get; set; }
 
-        public virtual WebResource WebResources { get; set; }
+        public virtual WebResource WebResource { get; set; }
     }
 }

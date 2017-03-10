@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DSitemapTester.BLL.Dtos;
+using DSitemapTester.BLL.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,7 +20,8 @@ namespace DSitemapTester.Controllers
         public ActionResult Checkup()
         {
             string selectedUrl = Request["select-url"];
-            return View();
+
+            return RedirectToAction("Index", "Test", new { selectedUrl });
         }
     }
 }

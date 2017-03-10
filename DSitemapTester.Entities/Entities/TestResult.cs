@@ -10,8 +10,6 @@ namespace DSitemapTester.Entities.Entities
     {
         public int Id { get; set; }
 
-        public SitemapResource SitemapResource { get; set; }
-
         public double ResponseTime { get; set; }
 
         public virtual Test Test { get; set; }

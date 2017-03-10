@@ -10,12 +10,12 @@ namespace DSitemapTester.Entities.Entities
     {
         public int Id { get; set; }
 
-        public DateTime Date { get; set; }
-
         public int TestsCount { get; set; }
 
         public ICollection<TestResult> TestResults { get; set; }
 
-        public virtual WebResource WebResource { get; set; }
+        public virtual SitemapResource SitemapResource { get; set; }
+
+        public virtual WebResourceTest WebResourceTest { get; set; }
     }
 }

@@ -14,6 +14,6 @@ namespace DSitemapTester.Entities.Entities
 
         public virtual ICollection<SitemapResource> SitemapResources { get; set; }
 
-        public virtual ICollection<Test> Tests { get; set; }
+        public virtual ICollection<WebResourceTest> Tests { get; set; }
     }
 }
