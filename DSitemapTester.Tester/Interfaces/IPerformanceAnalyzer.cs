@@ -9,8 +9,6 @@ namespace DSitemapTester.Tester.Interfaces
 {
     public interface IPerformanceAnalyzer
     {
-        IEnumerable<Test> GetConnectionResults(IEnumerable<string> urls);
-
-        IEnumerable<Test> GetConnectionResults(IEnumerable<string> urls, int testsCount, double interval, int timeout);
+        IEnumerable<Test> GetConnectionResults(IEnumerable<string> urls, int timeout, int testsCount);
     }
 }

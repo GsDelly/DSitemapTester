@@ -23,11 +23,11 @@ namespace DSitemapTester.BLL.Services
             this.saver = saver;
         }
 
-        public PresentationWebResourceDto GetTestResults(string url)
+        public PresentationWebResourceDto GetTestResults(string url, int timeout, int testsCount)
         {
             url = UrlAdaptor.GetUrl(url);
 
-            WebResourceDto testResults = tester.GetTestResults(url);
+            WebResourceDto testResults = tester.GetTestResults(url, timeout, testsCount);
 
             PresentationAutomapperConfig.Configure();
 

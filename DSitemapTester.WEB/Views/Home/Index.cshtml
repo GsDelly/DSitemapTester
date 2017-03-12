@@ -23,5 +23,36 @@
                 </span>
             </div>
         </div>
-    }   
+        <div>
+            <a id="extended-settings-link" onclick="panelchangestate('extended-settings')" href="#">Extended Settings </a>
+            <div id="extended-settings" class="box" style="display:none">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Settings</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="testCount"> Please set tests count: </label>
+                        <p><input class="form-control" type="number" id="testsCount" name="testsCount" value="" min="1" max="100" step="1"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="timeout"> Please set connection timeout:</label>
+                        <p><input class="form-control" type="number" id="timeout" name="timeout" value="" min="1" max="120" step="1"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
+
+@section scripts {
+<script>
+    function panelchangestate(id) {
+        $('#' + id).slideToggle('slow');
+    };
+</script>
+}
+
+

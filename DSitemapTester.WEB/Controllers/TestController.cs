@@ -19,9 +19,9 @@ namespace DSitemapTester.Controllers
             //this.chartService = chartService;
         }
         // GET: Test
-        public ActionResult Index(string selectedUrl)
+        public ActionResult Index(string selectedUrl, int timeout, int testsCount)
         {
-            PresentationWebResourceDto webResource = this.testService.GetTestResults(selectedUrl);
+            PresentationWebResourceDto webResource = this.testService.GetTestResults(selectedUrl, timeout, testsCount);
             //this.chartService.GetChartPie(webResource);
 
             return View(webResource);

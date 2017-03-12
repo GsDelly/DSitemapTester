@@ -18,7 +18,7 @@ namespace DSitemapTester.Tester
             this.analyzer = analyzer;
         }
 
-        public WebResourceDto GetTestResults(string url)
+        public WebResourceDto GetTestResults(string url, int timeout, int testsCount)
         {
             AutomapperConfig.Configure();
 
@@ -31,7 +31,7 @@ namespace DSitemapTester.Tester
                 sUrls.Add(sitemapUrl.Url);
             }
 
-            IEnumerable<Test> tests = this.analyzer.GetConnectionResults(sUrls);
+            IEnumerable<Test> tests = this.analyzer.GetConnectionResults(sUrls, timeout, testsCount);
 
             WebResourceDto webResourceDto = new WebResourceDto();
             IList<TestDto> testDto = new List<TestDto>();

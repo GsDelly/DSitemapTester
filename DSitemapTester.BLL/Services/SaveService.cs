@@ -23,7 +23,7 @@ namespace DSitemapTester.BLL.Services
             this.dataUnit = dataUnit;
         }
 
-        public async Task<bool> SaveData(WebResourceDto webResource)
+        public async Task SaveData(WebResourceDto webResource)
         {
             Task dbSaving = Task.Run(() =>
             {
@@ -31,8 +31,6 @@ namespace DSitemapTester.BLL.Services
             });
 
             await dbSaving;
-
-            return true;
         }
 
         private bool SaveTestData(WebResourceDto webResource)

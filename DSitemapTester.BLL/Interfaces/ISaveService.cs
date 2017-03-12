@@ -9,6 +9,6 @@ namespace DSitemapTester.BLL.Interfaces
 {
     public interface ISaveService
     {
-        Task<bool> SaveData(WebResourceDto webResource);
+        Task SaveData(WebResourceDto webResource);
     }
 }

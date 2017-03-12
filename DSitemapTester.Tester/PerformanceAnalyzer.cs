@@ -14,17 +14,17 @@ namespace DSitemapTester.Tester
 {
     public class PerformanceAnalyzer : IPerformanceAnalyzer
     {
-        public IEnumerable<Test> GetConnectionResults(IEnumerable<string> urls)
+        public IEnumerable<Test> GetConnectionResults(IEnumerable<string> urls, int timeout, int testsCount)
         {
-            int testsCount = ConnectionSettings.GetTestsCount();
+            if (testsCount == 0)
+            {
+                testsCount = ConnectionSettings.GetTestsCount();
+            }
+            if (timeout == 0)
+            {
+                timeout = ConnectionSettings.GetTimeout();
+            }
             double interval = ConnectionSettings.GetInterval();
-            int timeout = ConnectionSettings.GetTimeout();
-
-            return this.GetResults(urls, testsCount, interval, timeout);
-        }
-
-        public IEnumerable<Test> GetConnectionResults(IEnumerable<string> urls, int testsCount, double interval, int timeout)
-        {
 
             IEnumerable<Test> performanceTest = this.GetResults(urls, testsCount, interval, timeout);
 

@@ -43,7 +43,10 @@ namespace DSitemapTester.Tester
                     topSitemaps = new List<XElement>(bottomSitemaps);
                     foreach (XElement topSitemapsElement in topSitemaps)
                     {
-                        sitemap = XElement.Load(topSitemapsElement.Value);
+                        XName sitemapLoc = XName.Get("loc", topSitemapsElement.Name.NamespaceName);
+                        XElement locElement = topSitemapsElement.Element(sitemapLoc);
+
+                        sitemap = XElement.Load(locElement.Value);
                         xSitemap = XName.Get("sitemap", sitemap.Name.NamespaceName);
 
                         if (sitemap.Elements(xSitemap).Count() > 0)
@@ -73,7 +76,10 @@ namespace DSitemapTester.Tester
 
                 if (sitemapElement.Elements(xUrl).Count() == 0)
                 {
-                    this.url = sitemapElement.Value;
+                    XName sitemapLoc = XName.Get("loc", sitemapElement.Name.NamespaceName);
+                    XElement locElement = sitemapElement.Element(sitemapLoc);
+
+                    this.url = locElement.Value;
                     sitemap = XElement.Load(this.url);
                     xUrl = XName.Get("url", sitemap.Name.NamespaceName);
                 }
