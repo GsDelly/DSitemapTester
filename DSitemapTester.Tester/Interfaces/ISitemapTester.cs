@@ -9,6 +9,7 @@ namespace DSitemapTester.Tester.Interfaces
 {
     public interface ISitemapTester
     {
-        WebResourceDto GetTestResults(string url, int timeout, int testsCount);
+        ISitemapReader Reader { get; }
+        IPerformanceAnalyzer Analyzer { get; }
     }
 }

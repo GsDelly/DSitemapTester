@@ -1,4 +1,6 @@
-﻿using DSitemapTester.Tester.Dtos;
+﻿using DSitemapTester.Entities.Entities;
+using DSitemapTester.Tester.Dtos;
+using DSitemapTester.Tester.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,8 @@ namespace DSitemapTester.BLL.Interfaces
 {
     public interface ISaveService
     {
-        Task SaveData(WebResourceDto webResource);
+        bool SaveTestData(WebResourceTest webResourceTest, TesterTest test);
+
+        WebResourceTest GetNewTest(string url);
     }
 }

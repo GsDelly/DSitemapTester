@@ -12,7 +12,7 @@ namespace DSitemapTester.Entities.Entities
 
         public int TestsCount { get; set; }
 
-        public ICollection<TestResult> TestResults { get; set; }
+        public virtual ICollection<TestResult> TestResults { get; set; }
 
         public virtual SitemapResource SitemapResource { get; set; }
 

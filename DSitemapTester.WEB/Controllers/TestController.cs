@@ -11,20 +11,48 @@ namespace DSitemapTester.Controllers
     public class TestController : Controller
     {
         private ITestService testService;
-        //private IChartService chartService;
 
         public TestController(ITestService testService)
         {
             this.testService = testService;
-            //this.chartService = chartService;
         }
         // GET: Test
         public ActionResult Index(string selectedUrl, int timeout, int testsCount)
         {
-            PresentationWebResourceDto webResource = this.testService.GetTestResults(selectedUrl, timeout, testsCount);
-            //this.chartService.GetChartPie(webResource);
+            TestViewModel testModel = new TestViewModel();
+            testModel.Url = selectedUrl;
+            testModel.TestId = this.testService.RunTest(selectedUrl, timeout, testsCount);
 
-            return View(webResource);
+            return View(testModel);
+        }
+
+        [HttpPost]
+        public ActionResult LoadTestResults(int testId = 0)
+        {
+            string draw = this.Request.Form.GetValues("draw").FirstOrDefault();
+            string start = this.Request.Form.GetValues("start").FirstOrDefault();
+            string length = this.Request.Form.GetValues("length").FirstOrDefault();
+
+            int pageSize = length != null ? Convert.ToInt32(length) : 0;
+            int skip = start != null ? Convert.ToInt32(start) : 0;
+            int recordsTotal = this.testService.Count(testId);
+
+            PresentationWebResourceTestDto results = this.testService.GetTest(testId);
+            
+            results.Tests = results.Tests
+                .Skip(skip)
+                .Take(pageSize)
+                .ToList();
+
+            return this.Json(
+                new
+                {
+                    draw = draw,
+                    recordsFiltered = recordsTotal,
+                    recordsTotal = recordsTotal,
+                    data = results.Tests
+                },
+                JsonRequestBehavior.AllowGet);
         }
     }
 }

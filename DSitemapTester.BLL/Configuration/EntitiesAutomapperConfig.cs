@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DSitemapTester.Entities.Entities;
 using DSitemapTester.Tester.Dtos;
+using DSitemapTester.Tester.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,13 +16,13 @@ namespace DSitemapTester.BLL.Configuration
         {
             Mapper.Initialize(config =>
             {
-                config.CreateMap<TestDto, Test>()
+                config.CreateMap<TesterTest, Test>()
                 .ForMember(
                          e => e.TestsCount,
                          opt => opt.MapFrom(
                              res => res.TestsCount));
 
-                config.CreateMap<TestResultDto, TestResult>()
+                config.CreateMap<TesterTestResult, TestResult>()
                 .ForMember(
                          e => e.ResponseTime,
                          opt => opt.MapFrom(

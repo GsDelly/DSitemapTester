@@ -12,8 +12,10 @@ namespace DSitemapTester.Entities.Entities
 
         public DateTime Date { get; set; }
 
-        public TimeSpan Duration { get; set; } 
+        //public TimeSpan Duration { get; set; } 
 
         public virtual ICollection<Test> Tests { get; set; }
+
+        public virtual WebResource WebResource { get; set; }
     }
 }

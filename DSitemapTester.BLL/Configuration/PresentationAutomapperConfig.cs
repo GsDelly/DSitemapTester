@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DSitemapTester.BLL.Dtos;
-using DSitemapTester.Tester.Dtos;
+using DSitemapTester.Entities.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,31 +15,31 @@ namespace DSitemapTester.BLL.Configuration
         {
             Mapper.Initialize(config =>
             {
-                config.CreateMap<WebResourceDto, PresentationWebResourceDto>()
+                config.CreateMap<WebResource, PresentationWebResourceDto>()
                 .ForMember(
                          e => e.Url,
                          opt => opt.MapFrom(
                              res => res.Url));
 
-                config.CreateMap<WebResourceDto, PresentationWebResourceTestDto>()
+                config.CreateMap<WebResourceTest, PresentationWebResourceTestDto>()
                 .ForMember(
                          e => e.Date,
                          opt => opt.MapFrom(
-                             res => res.Tests.First().Date))
-                .ForMember(
-                         e => e.Duration,
-                         opt => opt.MapFrom(
-                             res => Convert.ToDouble((res.Tests.Last().Date - res.Tests.First().Date).TotalSeconds)))
+                             res => res.Date))
+                //.ForMember(
+                //         e => e.Duration,
+                //         opt => opt.MapFrom(
+                //             res => Convert.ToDouble(res.Date.Ticks)))
                 .ForMember(
                          e => e.Tests,
                          opt => opt.MapFrom(
                              res => res.Tests));
 
-                config.CreateMap<TestDto, PresentationTestDto>()
+                config.CreateMap<Test, PresentationTestDto>()
                  .ForMember(
                          e => e.Url,
                          opt => opt.MapFrom(
-                             res => res.Url))
+                             res => res.SitemapResource.Url))
                 .ForMember(
                          e => e.TestsCount,
                          opt => opt.MapFrom(
@@ -56,9 +56,9 @@ namespace DSitemapTester.BLL.Configuration
                          e => e.AverageResponseTime,
                          opt => opt.MapFrom(
                              pres => pres.TestResults.Select(obj =>
-                                         new TestResultDto()
+                                         new TestResult()
                                          {
-                                             ResponseTime = pres.TestResults.Average(resp => resp.ResponseTime)
+                                             ResponseTime = Math.Round(pres.TestResults.Average(resp => resp.ResponseTime), 3)
                                          }
                                      ).First()))
                 .ForMember(
@@ -66,11 +66,11 @@ namespace DSitemapTester.BLL.Configuration
                          opt => opt.MapFrom(
                              res => res.TestResults.Where(test => test.ResponseTime == 0).Count()));
 
-                config.CreateMap<TestResultDto, PresentationTestResultDto>()
+                config.CreateMap<TestResult, PresentationTestResultDto>()
                 .ForMember(
                          e => e.ResponseTime,
                          opt => opt.MapFrom(
-                             res => res.ResponseTime));
+                             res => Math.Round(res.ResponseTime, 3)));
             });
         }
     }

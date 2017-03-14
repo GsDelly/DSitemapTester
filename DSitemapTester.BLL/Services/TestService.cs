@@ -4,11 +4,13 @@ using DSitemapTester.BLL.Dtos;
 using DSitemapTester.BLL.Interfaces;
 using DSitemapTester.BLL.Utilities;
 using DSitemapTester.DAL.Interfaces;
+using DSitemapTester.Entities.Entities;
+using DSitemapTester.Tester.Configuration.Connection;
 using DSitemapTester.Tester.Dtos;
+using DSitemapTester.Tester.Entities;
 using DSitemapTester.Tester.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace DSitemapTester.BLL.Services
 {
@@ -16,42 +18,68 @@ namespace DSitemapTester.BLL.Services
     {
         private readonly ISitemapTester tester;
         private readonly ISaveService saver;
+        private readonly IUnitOfWork dataUnit;
 
-        public TestService(ISitemapTester tester, ISaveService saver)
+        public TestService(ISitemapTester tester, ISaveService saver, IUnitOfWork dataUnit)
         {
             this.tester = tester;
             this.saver = saver;
+            this.dataUnit = dataUnit;
         }
 
-        public PresentationWebResourceDto GetTestResults(string url, int timeout, int testsCount)
+        public PresentationWebResourceTestDto GetTest(int testId)
         {
-            url = UrlAdaptor.GetUrl(url);
-
-            WebResourceDto testResults = tester.GetTestResults(url, timeout, testsCount);
-
             PresentationAutomapperConfig.Configure();
 
-            PresentationWebResourceDto presentationTestResults = new PresentationWebResourceDto()
-            {
-                Tests = new List<PresentationWebResourceTestDto>()
-            };
+            WebResourceTest test = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId);
 
-            presentationTestResults.Url = testResults.Url;
+            PresentationWebResourceTestDto presentationTestResults = new PresentationWebResourceTestDto();
 
-            presentationTestResults.Tests.Add(Mapper.Map<WebResourceDto, PresentationWebResourceTestDto>(testResults));
+            presentationTestResults = Mapper.Map<WebResourceTest, PresentationWebResourceTestDto>(test);
 
-            foreach (PresentationWebResourceTestDto test in presentationTestResults.Tests)
-            {
-                test.TotalTestsCount = test.Tests.Sum(res => res.TestsCount);
-                test.TotalWrongTestsCount = test.Tests.Sum(res => res.WrongTestsCount);
-                test.WrongUrls = test.Tests.Where(res => res.WrongTestsCount == res.TestsCount).Count();
-                test.SuccessfulUrls = test.Tests.Where(res => res.WrongTestsCount == 0).Count();
-                test.Tests = test.Tests.OrderByDescending(res => res.AverageResponseTime.ResponseTime).ToList();
-            }
-
-            this.saver.SaveData(testResults);
+            presentationTestResults.TotalTestsCount = presentationTestResults.Tests.Sum(res => res.TestsCount);
+            presentationTestResults.TotalWrongTestsCount = presentationTestResults.Tests.Sum(res => res.WrongTestsCount);
+            presentationTestResults.WrongUrls = presentationTestResults.Tests.Where(res => res.WrongTestsCount == res.TestsCount).Count();
+            presentationTestResults.SuccessfulUrls = presentationTestResults.Tests.Where(res => res.WrongTestsCount == 0).Count();
+            presentationTestResults.Tests = presentationTestResults.Tests.OrderByDescending(res => res.AverageResponseTime.ResponseTime).ToList();
 
             return presentationTestResults;
+        }
+
+        public int RunTest(string url, int timeout, int testsCount)
+        {            
+            PresentationAutomapperConfig.Configure();
+            if (timeout == 0)
+            {
+                timeout = ConnectionSettings.GetTimeout();
+            }
+            if (testsCount == 0)
+            {
+                testsCount = ConnectionSettings.GetTestsCount();
+            }
+            double interval = ConnectionSettings.GetInterval();
+
+            url = UrlAdaptor.GetUrl(url);
+
+            IEnumerable<string> sUrls = this.tester.Reader.GetSitemapUrls(url);
+
+            WebResourceTest webResourceTest = saver.GetNewTest(url);
+
+            foreach (string sUrl in sUrls)
+            {
+                TesterTest test = this.tester.Analyzer.GetResult(sUrl, timeout, testsCount, interval);
+
+                saver.SaveTestData(webResourceTest, test);               
+            }
+
+            return webResourceTest.Id;
+        }
+
+        public int Count(int testId)
+        {
+            int testsCount = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId).Tests.Count();
+
+            return testsCount;
         }
     }
 }

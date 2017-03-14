@@ -11,7 +11,7 @@ namespace DSitemapTester.BLL.Dtos
     {
         public string Date { get; set; }
 
-        public double Duration { get; set; }
+        //public double Duration { get; set; }
 
         public int TotalTestsCount { get; set; }
 

@@ -1,10 +1,13 @@
 ﻿@using DSitemapTester.BLL.Dtos;
 
-@model PresentationWebResourceDto
+@model TestViewModel
 
 @{
     ViewBag.Title = "Test";
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles {
+    @Styles.Render("~/Content/DataTableStyles")
 }
 <div class="row">
     <div class="col-md-6">
@@ -51,8 +54,8 @@
     <div class="box-header with-border">
         <h2 style="text-align:center">WebResource : @Model.Url</h2>
 
-        <h4 style="text-align:center">Date: @Model.Tests.First().Date</h4>
-        <h4 style="text-align:center">Test is completed in @Model.Tests.First().Duration.ToString("0.00") seconds</h4>
+        @*<h4 style="text-align:center">Date: @Model.Tests.First().Date</h4>*@
+        @*<h4 style="text-align:center">Test is completed in @Model.Tests.First().Duration.ToString("0.00") seconds</h4>*@
     </div>
     <div class="box-body">
         <table id="testResults" class="table table-hover table-bordered table-striped table-condensed"
@@ -66,7 +69,7 @@
                     <th scope="col">Tests Count</th>
                 </tr>
             </thead>
-            <tbody>
+            @*<tbody>
                 @foreach (PresentationWebResourceTestDto webResourceTest in Model.Tests)
             {
                 foreach (PresentationTestDto test in webResourceTest.Tests)
@@ -99,101 +102,153 @@
                         </tr>
                     }
                 }
-            </tbody>
+            </tbody>*@
         </table>
     </div>
 </div>
 
 @section scripts {
+
+    @Scripts.Render("~/Scripts/DataTable")
     @Scripts.Render("~/Scripts/GoogleCharts")
 
-    <script type="text/javascript">
-        google.charts.load('current', { 'packages': ['corechart'] });
-        google.charts.setOnLoadCallback(drawTotalChart);
-        google.charts.setOnLoadCallback(drawUrlChart);
-
-        function drawTotalChart() {
-
-            var data = google.visualization.arrayToDataTable([
-              ['Task', 'Tests'],
-              ['Successful', @Model.Tests.First().TotalTestsCount - @Model.Tests.First().TotalWrongTestsCount],
-              ['Wrong',  @Model.Tests.First().TotalWrongTestsCount],
-            ]);
-
-            var options = {
-                title: 'Total Tests : ' + @Model.Tests.First().TotalTestsCount,
-                is3D: true,
-                colors: ['green', 'orange']
-            }
-
-            var chart = new google.visualization.PieChart(document.getElementById('total-chart'));
-
-            chart.draw(data, options);
+    <script>
+        function loadChartResults(testId)
+        {
+            return $.ajax({
+                type: 'GET',
+                async: false,
+                url: '/Chart/LoadChartResults?testId=' + testId,
+                datatype: 'json',
+                dataSrc: 'data'
+            });
         }
-        function drawUrlChart() {
-
-            var data = google.visualization.arrayToDataTable([
-              ['Task', 'Url'],
-              ['Successful', @Model.Tests.First().SuccessfulUrls],
-              ['Wrong', @Model.Tests.First().WrongUrls],
-              ['Warning',  @Model.Tests.First().Tests.Count - (@Model.Tests.First().SuccessfulUrls + @Model.Tests.First().WrongUrls)],
-            ]);
-
-            var options = {
-                title: 'Total Urls : ' + @Model.Tests.First().Tests.Count,
-                vAxis: {minValue: 0,
-                    maxValue: 100,
-                    format: "percent"
+    </script>
+    <script>
+        function loadTestResults(testId) {
+            alert('/Test/LoadTestResults?testId=' + testId);
+            $("#testResults").DataTable({
+                "processing": false,
+                "serverSide": true,
+                "filter": false,
+                "ajax": {
+                    url: '/Test/LoadTestResults?testId=' + testId,
+                    type: 'POST',
+                    datatype: 'json',
+                    dataSrc: 'data'
                 },
-                sliceVisibilityThreshold:0,
-                is3D: true,
-                colors: ['red', 'blue', 'orange']
-            };
+                "columns": [
+                    { 'data': 'Url', 'autoWidth': true,
+                        "render": function ( data, type, full, meta ) {
+                            return "<a href=" + data + ">" + data + '</a>';
+                        }
+                    },
+                    { 'data': 'MinimalResponseTime.ResponseTime', 'autoWidth': true },
+                    { 'data': 'AverageResponseTime.ResponseTime', 'autoWidth': true },
+                    { 'data': 'MaximalResponseTime.ResponseTime', 'autoWidth': true },
+                    { 'data': 'TestsCount', 'autoWidth': true }
+                ],
+            });
+        };
+</script>
 
+<script>
+    $(document).ready(function () {
+        var id = @Model.TestId;
+        loadTestResults(id);
 
-            var chart = new google.visualization.PieChart(document.getElementById('url-chart'));
+        var data = loadChartResults(id).responseJSON;
+        buildLineChart(data);
+        buildPieCharts(data);
+    });
+</script>
+       
+    <script type="text/javascript">
+        function buildPieCharts(results)
+        {
+            google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.setOnLoadCallback(drawTotalChart);
+            google.charts.setOnLoadCallback(drawUrlChart);
 
-            chart.draw(data, options);
+            function drawTotalChart() {
+                console.log(results.data);
+
+                var data = google.visualization.arrayToDataTable([
+                   ['Task', 'Tests'],
+                   ['Successful', results.data.TotalTestsCount - results.data.TotalWrongTestsCount],
+                   ['Wrong',   results.data.TotalWrongTestsCount],
+                ]);
+
+                var options = {
+                    title: 'Total Tests : ' + results.data.TotalTestsCount,
+                    is3D: true,
+                    colors: ['green', 'orange']
+                }
+
+                var chart = new google.visualization.PieChart(document.getElementById('total-chart'));
+
+                chart.draw(data, options);
+            }
+            function drawUrlChart() {
+
+                var data = google.visualization.arrayToDataTable([
+                  ['Task', 'Url'],
+                  ['Successful',results.data.SuccessfulUrls],
+                  ['Wrong', results.data.WrongUrls],
+                  ['Warning',  results.data.Tests.length - (results.data.SuccessfulUrls + results.data.WrongUrls)],
+                ]);
+
+                var options = {
+                    title: 'Total Urls : ' + results.data.Tests.length,
+                    vAxis: {minValue: 0,
+                        maxValue: 100,
+                        format: "percent"
+                    },
+                    sliceVisibilityThreshold:0,
+                    is3D: true,
+                    colors: ['red', 'blue', 'orange']
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('url-chart'));
+
+                chart.draw(data, options);
+            }
         }
     </script>
 
     <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawUrlLineChart);
+        function buildLineChart(results)
+        {
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.setOnLoadCallback(drawUrlLineChart);
 
-        function drawUrlLineChart() {
-            var data = new google.visualization.DataTable();
+            function drawUrlLineChart() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Url');
+                data.addColumn('number', 'Maximal');
+                data.addColumn('number', 'Average');
+                data.addColumn('number', 'Minimum');
 
-            var data=[];
-            var Header= ['Url', 'Maximal', 'Average', 'Minimum'];
+                for(var i = 0; i < results.data.Tests.length; i++)
+                {
+                    data.addRow([
+                        results.data.Tests[i].Url, 
+                        results.data.Tests[i].MaximalResponseTime.ResponseTime, 
+                        results.data.Tests[i].AverageResponseTime.ResponseTime,  
+                        results.data.Tests[i].MinimalResponseTime.ResponseTime
+                        ]);
+                }
 
-            data.push(Header);
+                var options = {
+                    title: 'Url Performance',
+                    curveType: 'function',
+                    legend: { position: 'bottom' }
+                };
 
+                var chart = new google.visualization.LineChart(document.getElementById('url-line-chart'));
 
-            @foreach (PresentationTestDto test in Model.Tests.First().Tests)
-          {
-          <text>
-            var temp=[];
-            temp.push('@test.Url.Split(new string[] { "://" }, StringSplitOptions.None)[1]');
-            temp.push(@test.MaximalResponseTime.ResponseTime.ToString("0.00").Replace(',', '.'));
-            temp.push(@test.AverageResponseTime.ResponseTime.ToString("0.00").Replace(',', '.'));
-            temp.push(@test.MinimalResponseTime.ResponseTime.ToString("0.00").Replace(',', '.'));
-
-            data.push(temp);
-            </text>
-          };
-
-            var options = {
-                title: 'Url Performance',
-                curveType: 'function',
-                legend: { position: 'bottom' }
-            };
-
-            var chartdata = new google.visualization.arrayToDataTable(data);
-
-            var chart = new google.visualization.LineChart(document.getElementById('url-line-chart'));
-
-            chart.draw(chartdata, options);
+                chart.draw(data, options);
+            }
         }
     </script>
 

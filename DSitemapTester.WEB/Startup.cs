@@ -1,8 +1,6 @@
-﻿using Microsoft.Owin;
-using Owin;
-using MyWebApplication;
+﻿using Owin;
 
-namespace MyWebApplication
+namespace DSitemapTester
 {
     public class Startup
     {

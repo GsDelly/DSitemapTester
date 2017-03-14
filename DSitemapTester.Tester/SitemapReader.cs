@@ -12,12 +12,19 @@ namespace DSitemapTester.Tester
     {
         private string url;
 
-        public IEnumerable<Sitemap> GetSitemapUrls(string url)
+        public IEnumerable<string> GetSitemapUrls(string url)
         {
             IEnumerable<XElement> xSitemaps = this.GetBottomSitemaps(url);
-            IEnumerable<Sitemap> sitemaps  = this.GetSitemapEntities(xSitemaps);
+            IEnumerable<TesterSitemap> sitemaps  = this.GetSitemapEntities(xSitemaps);
 
-            return sitemaps;
+            IList<string> sUrls = new List<string>();
+
+            foreach (TesterSitemap sitemapUrl in sitemaps)
+            {
+                sUrls.Add(sitemapUrl.Url);
+            }
+
+            return sUrls;
         }
 
         private IEnumerable<XElement> GetBottomSitemaps(string url)
@@ -63,11 +70,11 @@ namespace DSitemapTester.Tester
             return topSitemaps;
         }
    
-        private IEnumerable<Sitemap> GetSitemapEntities(IEnumerable<XElement> sitemaps)
+        private IEnumerable<TesterSitemap> GetSitemapEntities(IEnumerable<XElement> sitemaps)
         {
             IList<string> pageUrls = new List<string>();
-            IList<Sitemap> sitemapEntities = new List<Sitemap>();
-            Sitemap sitemapEntity = new Sitemap();
+            IList<TesterSitemap> sitemapEntities = new List<TesterSitemap>();
+            TesterSitemap sitemapEntity = new TesterSitemap();
 
             foreach (XElement sitemapElement in sitemaps)
             {
@@ -98,7 +105,7 @@ namespace DSitemapTester.Tester
                     XName xLastMod= XName.Get("lastmod", sitemap.Name.NamespaceName);
                     XElement lastModElement = webPage.Element(xLastMod);
 
-                    sitemapEntity = new Sitemap();
+                    sitemapEntity = new TesterSitemap();
 
                     sitemapEntity.Url = locElement.Value;
 

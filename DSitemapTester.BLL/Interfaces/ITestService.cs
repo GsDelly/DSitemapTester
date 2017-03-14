@@ -9,6 +9,10 @@ namespace DSitemapTester.BLL.Interfaces
 {
     public interface ITestService
     {
-        PresentationWebResourceDto GetTestResults(string url, int timeout, int testsCount);
+        PresentationWebResourceTestDto GetTest(int testId);
+
+        int RunTest(string url, int timeout, int testsCount);
+
+        int Count(int testId);
     }
 }
