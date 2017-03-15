@@ -9,6 +9,7 @@
 @section styles {
     @Styles.Render("~/Content/DataTableStyles")
 }
+
 <div class="row">
     <div class="col-md-6">
         <div class="box">
@@ -69,48 +70,37 @@
                     <th scope="col">Tests Count</th>
                 </tr>
             </thead>
-            @*<tbody>
-                @foreach (PresentationWebResourceTestDto webResourceTest in Model.Tests)
-            {
-                foreach (PresentationTestDto test in webResourceTest.Tests)
-                {
-                        <tr class="cursor-pointer">
-                            <td>
-                                @if (test.WrongTestsCount == 0)
-                                {
-                                    <img src="~/Content/icons/icon_success.png" />
-                                    <a href='@Html.DisplayFor(res => test.Url)'>@Html.DisplayFor(res => test.Url)</a>
-                                }
-                                else
-                                {
-                                    if (test.WrongTestsCount == test.TestsCount)
-                                    {
-                                        <img src="~/Content/icons/icon_wrong.png" />
-                                        <a href='@Html.DisplayFor(res => test.Url)'>@Html.DisplayFor(res => test.Url)</a>
-                                    }
-                                    else
-                                    {
-                                        <img src="~/Content/icons/icon_warning.png" />
-                                        <a href = '@Html.DisplayFor(res => test.Url)'>@Html.DisplayFor(res => test.Url)</a>
-                                    }
-                                }
-                            </td>
-                            <td> @Html.DisplayFor(res => test.MinimalResponseTime.ResponseTime) </td>
-                            <td> @Html.DisplayFor(res => test.AverageResponseTime.ResponseTime) </td>
-                            <td> @Html.DisplayFor(res => test.MaximalResponseTime.ResponseTime) </td>
-                            <td> @Html.DisplayFor(res => test.TestsCount) </td>
-                        </tr>
-                    }
-                }
-            </tbody>*@
         </table>
     </div>
 </div>
 
 @section scripts {
 
-    @Scripts.Render("~/Scripts/DataTable")
-    @Scripts.Render("~/Scripts/GoogleCharts")
+    @Scripts.Render("~/Scripts/SignalR");
+    @Scripts.Render("~/Scripts/DataTable");
+    @Scripts.Render("~/Scripts/GoogleCharts");
+    <script src="signalr/hubs"></script>
+
+    <script>
+        $(function () {
+        // Declare a proxy to reference the hub.
+        var hub = $.connection.testHub;
+
+        hub.client.addMessage = function () {
+            var id = @Model.TestId;
+            loadTestResults(id);
+
+            var data = loadChartResults(id).responseJSON;
+            buildLineChart(data);
+            buildPieCharts(data);
+        };
+
+        // Start the connection.
+        $.connection.hub.start().done(function () {
+        }).fail(function (e) {
+        });
+        });
+    </script>
 
     <script>
         function loadChartResults(testId)
@@ -124,9 +114,14 @@
             });
         }
     </script>
+
     <script>
         function loadTestResults(testId) {
-            alert('/Test/LoadTestResults?testId=' + testId);
+            var testTable = document.getElementById('testResults');
+            if (testTable)
+            {
+                $('#testResults').dataTable().fnDestroy();
+            }
             $("#testResults").DataTable({
                 "processing": false,
                 "serverSide": true,
@@ -151,18 +146,14 @@
             });
         };
 </script>
+    
+    <script>
+        window.onload = function () {
+            $.post("@Url.Action("RunTest","Test")", 
+                { testId : @Model.TestId, timeout: @Model.Timeout, testsCount: @Model.TestsCount});               
+        }
+    </script>    
 
-<script>
-    $(document).ready(function () {
-        var id = @Model.TestId;
-        loadTestResults(id);
-
-        var data = loadChartResults(id).responseJSON;
-        buildLineChart(data);
-        buildPieCharts(data);
-    });
-</script>
-       
     <script type="text/javascript">
         function buildPieCharts(results)
         {
@@ -171,7 +162,6 @@
             google.charts.setOnLoadCallback(drawUrlChart);
 
             function drawTotalChart() {
-                console.log(results.data);
 
                 var data = google.visualization.arrayToDataTable([
                    ['Task', 'Tests'],

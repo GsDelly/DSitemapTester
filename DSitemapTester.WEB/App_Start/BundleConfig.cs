@@ -18,6 +18,9 @@ namespace DSitemapTester
                 .Include("~/Content/AdminLTE/AdminLTE.css")
                 .Include("~/Content/AdminLTE/skins/skin-yellow.css"));
 
+            bundles.Add(new StyleBundle("~/Content/DataTableStyles")
+                .Include("~/Content/DataTables/css/dataTables.bootstrap.css"));
+
             bundles.Add(new ScriptBundle("~/Scripts/jquery")
                .Include("~/Scripts/jquery-{version}.js"));
 
@@ -31,12 +34,13 @@ namespace DSitemapTester
             bundles.Add(new ScriptBundle("~/Scripts/GoogleCharts", googleChartsCdnPath)
               .Include("~/Scripts/loader.js"));
 
-            bundles.Add(new StyleBundle("~/Content/DataTableStyles")
-                .Include("~/Content/DataTables/css/dataTables.bootstrap.css"));
-
             bundles.Add(new ScriptBundle("~/Scripts/DataTable")
                 .Include("~/Scripts/DataTables/jquery.dataTables.min.js")
                 .Include("~/Scripts/DataTables/dataTables.bootstrap.min.js"));
+
+            bundles.Add(new ScriptBundle("~/Scripts/SignalR")
+               .Include("~/Scripts/jquery.signalR-{version}.js"));
+
         }
     }
 }

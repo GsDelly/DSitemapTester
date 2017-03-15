@@ -1,4 +1,5 @@
 ﻿using DSitemapTester.BLL.Dtos;
+using DSitemapTester.Entities.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,15 @@ namespace DSitemapTester.BLL.Interfaces
 {
     public interface ITestService
     {
+        Action OnTestFinished { get; set; }
+
+        void TestFinished();
+
         PresentationWebResourceTestDto GetTest(int testId);
 
-        int RunTest(string url, int timeout, int testsCount);
+        void RunTest(int testId, int timeout, int testsCount);
+
+        int GetTestId(string url);
 
         int Count(int testId);
     }

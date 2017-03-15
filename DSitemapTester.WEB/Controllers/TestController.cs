@@ -1,8 +1,12 @@
 ﻿using DSitemapTester.BLL.Dtos;
 using DSitemapTester.BLL.Interfaces;
+using DSitemapTester.Hubs;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -16,13 +20,17 @@ namespace DSitemapTester.Controllers
         {
             this.testService = testService;
         }
+
         // GET: Test
         public ActionResult Index(string selectedUrl, int timeout, int testsCount)
         {
             TestViewModel testModel = new TestViewModel();
-            testModel.Url = selectedUrl;
-            testModel.TestId = this.testService.RunTest(selectedUrl, timeout, testsCount);
 
+            testModel.Url = selectedUrl;
+            testModel.TestId = this.testService.GetTestId(selectedUrl);
+            testModel.Timeout = timeout;
+            testModel.TestsCount = testsCount;
+            //testModel.TestId = this.testService.RunTest(selectedUrl, timeout, testsCount);
             return View(testModel);
         }
 
@@ -53,6 +61,25 @@ namespace DSitemapTester.Controllers
                     data = results.Tests
                 },
                 JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult RunTest(int testId, int timeout, int testsCount)
+        {
+            this.testService.OnTestFinished += this.TestCompleted;
+            Task test = Task.Factory.StartNew(() =>
+            {
+                this.testService.RunTest(testId, timeout, testsCount);
+            });
+
+            test.Wait();
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
+        public void TestCompleted()
+        {
+            Debug.WriteLine("Debug");
+            TestHub.SendUpdateMessage();
         }
     }
 }

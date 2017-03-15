@@ -9,6 +9,7 @@ using DSitemapTester.Tester.Configuration.Connection;
 using DSitemapTester.Tester.Dtos;
 using DSitemapTester.Tester.Entities;
 using DSitemapTester.Tester.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,6 +26,13 @@ namespace DSitemapTester.BLL.Services
             this.tester = tester;
             this.saver = saver;
             this.dataUnit = dataUnit;
+        }
+
+        public Action OnTestFinished { get; set; }
+
+        public void TestFinished()
+        {
+            this.OnTestFinished();
         }
 
         public PresentationWebResourceTestDto GetTest(int testId)
@@ -46,7 +54,16 @@ namespace DSitemapTester.BLL.Services
             return presentationTestResults;
         }
 
-        public int RunTest(string url, int timeout, int testsCount)
+        public int GetTestId(string url)
+        {
+            url = UrlAdaptor.GetUrl(url);
+
+            WebResourceTest webResourceTest = saver.GetNewTest(url);
+
+            return webResourceTest.Id;
+        }
+
+        public void RunTest(int testId,  int timeout, int testsCount)
         {            
             PresentationAutomapperConfig.Configure();
             if (timeout == 0)
@@ -59,20 +76,18 @@ namespace DSitemapTester.BLL.Services
             }
             double interval = ConnectionSettings.GetInterval();
 
-            url = UrlAdaptor.GetUrl(url);
+            WebResourceTest webResourceTest = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId);
 
-            IEnumerable<string> sUrls = this.tester.Reader.GetSitemapUrls(url);
-
-            WebResourceTest webResourceTest = saver.GetNewTest(url);
+            IEnumerable<string> sUrls = this.tester.Reader.GetSitemapUrls(webResourceTest.WebResource.Url);
 
             foreach (string sUrl in sUrls)
             {
                 TesterTest test = this.tester.Analyzer.GetResult(sUrl, timeout, testsCount, interval);
 
-                saver.SaveTestData(webResourceTest, test);               
-            }
+                saver.SaveTestData(webResourceTest, test);
 
-            return webResourceTest.Id;
+                this.TestFinished();
+            }
         }
 
         public int Count(int testId)
@@ -81,5 +96,6 @@ namespace DSitemapTester.BLL.Services
 
             return testsCount;
         }
+
     }
 }

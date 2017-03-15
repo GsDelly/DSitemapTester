@@ -11,5 +11,9 @@ namespace DSitemapTester.BLL.Dtos
         public string Url { get; set; }
 
         public int TestId { get; set; }
+
+        public int Timeout { get; set; }
+
+        public int TestsCount { get; set; }
     }
 }
