@@ -111,90 +111,92 @@
 
     @*stopTest*@
     <script>
-                function stopTest()
-                {
-                    $.post("@Url.Action("StopTest","Test")");
-                }
+        function stopTest()
+        {
+            var id = $.connection.hub.id;
+            alert(id);
+            $.post("@Url.Action("StopTest", "Test")",
+         {connectionId: id});
+        }
     </script>
 
     @*signalR*@
     <script>
-                $(function () {
-                    // Declare a proxy to reference the hub.
-                    var hub = $.connection.testHub;
+        $(function () {
+            // Declare a proxy to reference the hub.
+            var hub = $.connection.testHub;
 
-                    hub.client.urlsFounded = function (urlsCount) {
-                        stopLoadingAnimation();
-                    };
+            hub.client.urlsFounded = function (urlsCount) {
+                stopLoadingAnimation();
+            };
 
-                    hub.client.testFinished = function (urlsCount) {
-                        var id = @Model.TestId;
-                        appendData(id, urlsCount);
-                    };
+            hub.client.testFinished = function (urlsCount) {
+                var id = @Model.TestId;
+                appendData(id, urlsCount);
+            };
 
-                    // Start the connection.
-                    $.connection.hub.start(function () {
-                        var id = $.connection.hub.id;
-                         $.post("@Url.Action("RunTest","Test")",
-                        { testId : @Model.TestId, timeout: @Model.Timeout, testsCount: @Model.TestsCount, connectionId: id});
-                    });
-
-                });
+            // Start the connection.
+            $.connection.hub.start(function () {
+                var id = $.connection.hub.id;
+                $.post("@Url.Action("RunTest","Test")",
+               { testId : @Model.TestId, timeout: @Model.Timeout, testsCount: @Model.TestsCount, connectionId: id});
+            });
+        });
     </script>
 
     @*buildTestResultsTable*@
     <script>
-                function buildTestResultsTable() {
-                    return $.extend( true, $.fn.dataTable.defaults, {
-                        "processing": false,
-                        "serverSide": true,
-                        "filter": false,
-                        "paging": true,
-                        "ordering": true,
-                        "order": [[3, 'desc']]
-                    } );
-                };
+        function buildTestResultsTable() {
+            return $.extend( true, $.fn.dataTable.defaults, {
+                "processing": false,
+                "serverSide": true,
+                "filter": false,
+                "paging": true,
+                "ordering": true,
+                "order": [[3, 'desc']]
+            } );
+        };
     </script>
 
     @*AppendData*@
     <script>
-                function appendData(testId, urlsCount) {
-                    console.log(urlsCount);
+        function appendData(testId, urlsCount) {
+            console.log(urlsCount);
 
-                    var testTable = $('#testResults').dataTable();;
-                    //if(!$.fn.DataTable.isDataTable('#testResults'))
-                    //{
-                    //    testTable = $('#testResults').dataTable();
-                    //}
-                    //else
-                    //{
-                    //    testTable = $('#testResults').dataTable();
-                    //}
+            var testTable = $('#testResults').dataTable();;
+            //if(!$.fn.DataTable.isDataTable('#testResults'))
+            //{
+            //    testTable = $('#testResults').dataTable();
+            //}
+            //else
+            //{
+            //    testTable = $('#testResults').dataTable();
+            //}
 
-                    $.ajax ({
-                        url: '/Test/LoadTestResults?testId=' + testId,
-                        type: 'POST',
-                        datatype: 'json',
-                        data: {
-                            'start': urlsCount - 1,
-                        },
-                        dataSrc: 'data',
-                        success: function(response)
-                        {
-                            var data = response.data;
+            $.ajax ({
+                url: '/Test/LoadTestResults?testId=' + testId,
+                type: 'POST',
+                datatype: 'json',
+                data: {
+                    'start': urlsCount - 1,
+                },
+                dataSrc: 'data',
+                success: function(response)
+                {
+                    var data = response.data;
 
-                            console.log(data)
+                    console.log(data)
 
-                            appendTableData(testTable, data);
+                    appendTableData(testTable, data);
 
-                            renderPieCharts(data);
+                    renderPieCharts(data);
 
-                            renderLineChart($('#testResults').dataTable().fnGetData());
+                    renderLineChart($('#testResults').dataTable().fnGetData());
 
-                            renderLastUrlText(data.Tests[data.Tests.length-1].Url)
-                        }
-                    });
-                };
+                    renderLastUrlText(data.Tests[data.Tests.length-1].Url)
+                }
+            });
+        };
     </script>
 
     @*RenderLineChart*@

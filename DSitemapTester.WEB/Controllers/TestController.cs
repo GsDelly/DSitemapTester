@@ -1,4 +1,5 @@
 ﻿using DSitemapTester.BLL.Dtos;
+using DSitemapTester.BLL.Entities;
 using DSitemapTester.BLL.Interfaces;
 using DSitemapTester.Hubs;
 using System;
@@ -84,6 +85,8 @@ namespace DSitemapTester.Controllers
             this.testService.OnTestFinished += this.TestCompleted;
             this.testService.OnUrlsFounded += this.UrlsFounded;
 
+            Connections.Add(connectionId, cancelTokenSrc);
+
             Task test = Task.Factory.StartNew(() =>
             {
                 this.testService.RunTest(testId, timeout, testsCount, this.cancelTokenSrc.Token, connectionId);
@@ -96,11 +99,12 @@ namespace DSitemapTester.Controllers
         }
 
         [HttpPost]
-        public ActionResult StopTest()
+        public ActionResult StopTest(string connectionId)
         {
-           this.cancelTokenSrc.Cancel();
+            Connections.GetToken(connectionId).Cancel();
+            Connections.Remove(connectionId);
 
-           return new HttpStatusCodeResult(HttpStatusCode.OK);
+            return new HttpStatusCodeResult(HttpStatusCode.OK);  
         }
     }
 }

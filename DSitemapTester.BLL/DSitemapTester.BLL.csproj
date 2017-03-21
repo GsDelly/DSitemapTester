@@ -88,6 +88,7 @@
     <Compile Include="Dtos\PresentationTestResultDto.cs" />
     <Compile Include="Dtos\PresentationWebResourceTestDto.cs" />
     <Compile Include="Dtos\TestViewModel.cs" />
+    <Compile Include="Entities\Connections.cs" />
     <Compile Include="Interfaces\ISaveService.cs" />
     <Compile Include="Interfaces\ITestService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -94,15 +94,22 @@ namespace DSitemapTester.BLL.Services
 
                 for (int i = 0; i < sUrls.Count(); i++)
                 {
-                    string sUrl = sUrls.ElementAt(i);
+                    if (!token.IsCancellationRequested)
+                    {
+                        string sUrl = sUrls.ElementAt(i);
 
-                    TesterTest test = this.tester.Analyzer.GetResult(sUrl, timeout, testsCount);
+                        TesterTest test = this.tester.Analyzer.GetResult(sUrl, timeout, testsCount);
 
-                    saver.SaveTestData(webResourceTest, test);
+                        saver.SaveTestData(webResourceTest, test);
 
-                    this.TestFinished(connectionId, i+1);
+                        this.TestFinished(connectionId, i + 1);
 
-                    Task.Delay(Convert.ToInt32(interval * 1000)).Wait();
+                        Task.Delay(Convert.ToInt32(interval * 1000)).Wait();
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
         }
