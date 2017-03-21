@@ -40,6 +40,16 @@ namespace DSitemapTester.Controllers
             return View(testModel);
         }
 
+        public void TestCompleted(string connectionId, int urlsCount)
+        {
+            this.testHub.SendUpdateMessage(connectionId, urlsCount);
+        }
+
+        public void UrlsFounded(string connectionId, int urlsCount)
+        {
+            this.testHub.SendUrlsFoundedMessage(connectionId, urlsCount);
+        }
+
         [HttpPost]
         public ActionResult LoadTestResults(int testId = 0)
         {
@@ -74,30 +84,15 @@ namespace DSitemapTester.Controllers
             this.testService.OnTestFinished += this.TestCompleted;
             this.testService.OnUrlsFounded += this.UrlsFounded;
 
-            HostingEnvironment.QueueBackgroundWorkItem(ct => Task.Factory.StartNew(() =>
+            Task test = Task.Factory.StartNew(() =>
             {
                 this.testService.RunTest(testId, timeout, testsCount, this.cancelTokenSrc.Token, connectionId);
             },
-            this.cancelTokenSrc.Token));
+            this.cancelTokenSrc.Token);
 
-            //Task test = Task.Factory.StartNew(() =>
-            //{
-            //    this.testService.RunTest(testId, timeout, testsCount, this.cancelTokenSrc.Token, connectionId);
-            //}, 
-            //this.cancelTokenSrc.Token);
+            test.Wait();
 
-            //test.Wait();
             return new HttpStatusCodeResult(HttpStatusCode.OK);
-        }
-
-        public void TestCompleted(string connectionId, int urlsCount)
-        {
-            this.testHub.SendUpdateMessage(connectionId, urlsCount);
-        }
-
-        public void UrlsFounded(string connectionId, int urlsCount)
-        {
-            this.testHub.SendUrlsFoundedMessage(connectionId, urlsCount);
         }
 
         [HttpPost]

@@ -13,13 +13,6 @@
 <head>
 </head>
 <body>
-    <div id="loading" class="loading-image">
-        <div>
-            <h7>Please wait...</h7>
-            <img src="~/Content/icons/loading.gif" />
-        </div>
-    </div>
-
     <div class="box">
         <div class="box-body">
             <div class="input-group">
@@ -59,7 +52,12 @@
             </div>
         </div>
     </div>
-
+    <div id="loading" class="loading-image">
+        <div>
+            <h7>Please wait...</h7>
+            <img src="~/Content/icons/loading.gif" />
+        </div>
+    </div>
     <div class="box">
         <div class="box-header with-border">
             <h3 class="box-title">Url Tests</h3>
@@ -99,9 +97,9 @@
 
 @section scripts {
 
-    @Scripts.Render("~/Scripts/SignalR");
-    @Scripts.Render("~/Scripts/DataTable");
-    @Scripts.Render("~/Scripts/GoogleCharts");
+    @Scripts.Render("~/Scripts/SignalR")
+    @Scripts.Render("~/Scripts/DataTable")
+    @Scripts.Render("~/Scripts/GoogleCharts")
     <script src="signalr/hubs"></script>
 
     @*window.onload*@
@@ -126,7 +124,6 @@
                     var hub = $.connection.testHub;
 
                     hub.client.urlsFounded = function (urlsCount) {
-                        alert('urlsFounded');
                         stopLoadingAnimation();
                     };
 

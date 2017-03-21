@@ -23,14 +23,14 @@ textarea {
     padding-left: 25px;
 }
 
-.loading-image{
+.loading-image {
     position: absolute;
-    top: 50%;
     left: 50%;
-    margin-top: -50px;
-    margin-left: -50px;
+    top: 50%;
+    margin: 50px 0px 0px -50px;
     width: 100px;
     height: 100px;
+    position: relative;
 }
 
 hr{ 

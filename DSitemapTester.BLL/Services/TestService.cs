@@ -71,7 +71,7 @@ namespace DSitemapTester.BLL.Services
             return webResourceTest.Id;
         }
 
-        public void RunTest(int testId,  int timeout, int testsCount, CancellationToken token/*, string connectionId*/)
+        public void RunTest(int testId,  int timeout, int testsCount, CancellationToken token, string connectionId)
         {
             if (!token.IsCancellationRequested)
             {
@@ -90,7 +90,7 @@ namespace DSitemapTester.BLL.Services
 
                 IEnumerable<string> sUrls = this.tester.Reader.GetSitemapUrls(webResourceTest.WebResource.Url);
 
-                this.UrlsFounded("----------", sUrls.Count());
+                this.UrlsFounded(connectionId, sUrls.Count());
 
                 for (int i = 0; i < sUrls.Count(); i++)
                 {
@@ -100,7 +100,7 @@ namespace DSitemapTester.BLL.Services
 
                     saver.SaveTestData(webResourceTest, test);
 
-                    this.TestFinished("----------", i+1);
+                    this.TestFinished(connectionId, i+1);
 
                     Task.Delay(Convert.ToInt32(interval * 1000)).Wait();
                 }
