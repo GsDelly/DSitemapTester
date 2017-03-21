@@ -12,6 +12,8 @@ using DSitemapTester.Tester.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DSitemapTester.BLL.Services
 {
@@ -28,11 +30,17 @@ namespace DSitemapTester.BLL.Services
             this.dataUnit = dataUnit;
         }
 
-        public Action OnTestFinished { get; set; }
+        public Action<string, int> OnTestFinished { get; set; }
+        public Action<string, int> OnUrlsFounded { get; set; }
 
-        public void TestFinished()
+        public void TestFinished(string coonectionId, int urlsCount)
         {
-            this.OnTestFinished();
+            this.OnTestFinished(coonectionId, urlsCount);
+        }
+
+        public void UrlsFounded(string coonectionId, int totalUrlsCount)
+        {
+            this.OnUrlsFounded(coonectionId, totalUrlsCount);
         }
 
         public PresentationWebResourceTestDto GetTest(int testId)
@@ -49,7 +57,7 @@ namespace DSitemapTester.BLL.Services
             presentationTestResults.TotalWrongTestsCount = presentationTestResults.Tests.Sum(res => res.WrongTestsCount);
             presentationTestResults.WrongUrls = presentationTestResults.Tests.Where(res => res.WrongTestsCount == res.TestsCount).Count();
             presentationTestResults.SuccessfulUrls = presentationTestResults.Tests.Where(res => res.WrongTestsCount == 0).Count();
-            presentationTestResults.Tests = presentationTestResults.Tests.OrderByDescending(res => res.AverageResponseTime.ResponseTime).ToList();
+            presentationTestResults.TotalUrls = presentationTestResults.Tests.Count();
 
             return presentationTestResults;
         }
@@ -63,30 +71,39 @@ namespace DSitemapTester.BLL.Services
             return webResourceTest.Id;
         }
 
-        public void RunTest(int testId,  int timeout, int testsCount)
-        {            
-            PresentationAutomapperConfig.Configure();
-            if (timeout == 0)
+        public void RunTest(int testId,  int timeout, int testsCount, CancellationToken token/*, string connectionId*/)
+        {
+            if (!token.IsCancellationRequested)
             {
-                timeout = ConnectionSettings.GetTimeout();
-            }
-            if (testsCount == 0)
-            {
-                testsCount = ConnectionSettings.GetTestsCount();
-            }
-            double interval = ConnectionSettings.GetInterval();
+                PresentationAutomapperConfig.Configure();
+                if (timeout == 0)
+                {
+                    timeout = ConnectionSettings.GetTimeout();
+                }
+                if (testsCount == 0)
+                {
+                    testsCount = ConnectionSettings.GetTestsCount();
+                }
+                double interval = ConnectionSettings.GetInterval();
 
-            WebResourceTest webResourceTest = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId);
+                WebResourceTest webResourceTest = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId);
 
-            IEnumerable<string> sUrls = this.tester.Reader.GetSitemapUrls(webResourceTest.WebResource.Url);
+                IEnumerable<string> sUrls = this.tester.Reader.GetSitemapUrls(webResourceTest.WebResource.Url);
 
-            foreach (string sUrl in sUrls)
-            {
-                TesterTest test = this.tester.Analyzer.GetResult(sUrl, timeout, testsCount, interval);
+                this.UrlsFounded("----------", sUrls.Count());
 
-                saver.SaveTestData(webResourceTest, test);
+                for (int i = 0; i < sUrls.Count(); i++)
+                {
+                    string sUrl = sUrls.ElementAt(i);
 
-                this.TestFinished();
+                    TesterTest test = this.tester.Analyzer.GetResult(sUrl, timeout, testsCount);
+
+                    saver.SaveTestData(webResourceTest, test);
+
+                    this.TestFinished("----------", i+1);
+
+                    Task.Delay(Convert.ToInt32(interval * 1000)).Wait();
+                }
             }
         }
 

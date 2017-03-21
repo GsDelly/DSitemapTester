@@ -17,6 +17,8 @@ namespace DSitemapTester.BLL.Dtos
 
         public int TotalWrongTestsCount { get; set; }
 
+        public int TotalUrls { get; set; }
+
         public int SuccessfulUrls { get; set; }
 
         public int WrongUrls { get; set; }

@@ -17,7 +17,7 @@ namespace DSitemapTester.BLL.Utilities
             builder.Register(db => new SitemapContext("SitemapContext")).InstancePerRequest();
             builder.RegisterType<EFUnitOfWork>().As<IUnitOfWork>();
             // Services config
-            builder.RegisterType<TestService>().As<ITestService>();
+            builder.RegisterType<TestService>().As<ITestService>().InstancePerLifetimeScope();
             builder.RegisterType<SaveService>().As<ISaveService>();
             builder.RegisterType<PerformanceAnalyzer>().As<IPerformanceAnalyzer>();
             builder.RegisterType<SitemapReader>().As<ISitemapReader>();

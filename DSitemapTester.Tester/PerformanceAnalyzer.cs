@@ -14,11 +14,11 @@ namespace DSitemapTester.Tester
 {
     public class PerformanceAnalyzer : IPerformanceAnalyzer
     {
-        public TesterTest GetResult(string url, int timeout, int testsCount, double interval)
+        public TesterTest GetResult(string url, int timeout, int testsCount)
         {
             TesterTest test = new TesterTest();
 
-            test = this.GetTestResult(url, timeout, testsCount, interval);
+            test = this.GetTestResult(url, timeout, testsCount);
             test.Url = url;
             test.TestsCount = testsCount;
             test.Date = DateTime.Now;
@@ -26,7 +26,7 @@ namespace DSitemapTester.Tester
             return test;
         }
 
-        private TesterTest GetTestResult(string url, int timeout, int testsCount, double interval)
+        private TesterTest GetTestResult(string url, int timeout, int testsCount)
         {
             IList<Task<TesterTestResult>> tasks = new List<Task<TesterTestResult>>();
             IList<TesterTestResult> testResults = new List<TesterTestResult>();
@@ -64,8 +64,6 @@ namespace DSitemapTester.Tester
 
                     return result;
                 }));
-
-                Task.Delay(Convert.ToInt32(interval * 1000)).Wait();
             }
             Task.WaitAll(tasks.ToArray());
 

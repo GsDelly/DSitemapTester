@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 
 namespace DSitemapTester.Controllers
@@ -15,71 +17,95 @@ namespace DSitemapTester.Controllers
     public class TestController : Controller
     {
         private ITestService testService;
+        private CancellationTokenSource cancelTokenSrc;
+        private TestHub testHub;
 
         public TestController(ITestService testService)
         {
             this.testService = testService;
+            this.cancelTokenSrc = new CancellationTokenSource();
+            this.testHub = new TestHub();
         }
 
         // GET: Test
         public ActionResult Index(string selectedUrl, int timeout, int testsCount)
         {
             TestViewModel testModel = new TestViewModel();
-
+            
             testModel.Url = selectedUrl;
             testModel.TestId = this.testService.GetTestId(selectedUrl);
             testModel.Timeout = timeout;
             testModel.TestsCount = testsCount;
-            //testModel.TestId = this.testService.RunTest(selectedUrl, timeout, testsCount);
+
             return View(testModel);
         }
 
         [HttpPost]
         public ActionResult LoadTestResults(int testId = 0)
         {
-            string draw = this.Request.Form.GetValues("draw").FirstOrDefault();
             string start = this.Request.Form.GetValues("start").FirstOrDefault();
-            string length = this.Request.Form.GetValues("length").FirstOrDefault();
+            //string draw = this.Request.Form.GetValues("draw").FirstOrDefault();
+            //string start = this.Request.Form.GetValues("start").FirstOrDefault();
 
-            int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
             int recordsTotal = this.testService.Count(testId);
 
             PresentationWebResourceTestDto results = this.testService.GetTest(testId);
-            
+
             results.Tests = results.Tests
                 .Skip(skip)
-                .Take(pageSize)
+                .Take(1)
                 .ToList();
 
             return this.Json(
                 new
                 {
-                    draw = draw,
-                    recordsFiltered = recordsTotal,
+                    //draw = draw,
+                    //recordsFiltered = recordsTotal,
                     recordsTotal = recordsTotal,
-                    data = results.Tests
+                    data = results
                 },
                 JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public ActionResult RunTest(int testId, int timeout, int testsCount)
+        public ActionResult RunTest(int testId, int timeout, int testsCount, string connectionId)
         {
             this.testService.OnTestFinished += this.TestCompleted;
-            Task test = Task.Factory.StartNew(() =>
-            {
-                this.testService.RunTest(testId, timeout, testsCount);
-            });
+            this.testService.OnUrlsFounded += this.UrlsFounded;
 
-            test.Wait();
+            HostingEnvironment.QueueBackgroundWorkItem(ct => Task.Factory.StartNew(() =>
+            {
+                this.testService.RunTest(testId, timeout, testsCount, this.cancelTokenSrc.Token, connectionId);
+            },
+            this.cancelTokenSrc.Token));
+
+            //Task test = Task.Factory.StartNew(() =>
+            //{
+            //    this.testService.RunTest(testId, timeout, testsCount, this.cancelTokenSrc.Token, connectionId);
+            //}, 
+            //this.cancelTokenSrc.Token);
+
+            //test.Wait();
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
-        public void TestCompleted()
+        public void TestCompleted(string connectionId, int urlsCount)
         {
-            Debug.WriteLine("Debug");
-            TestHub.SendUpdateMessage();
+            this.testHub.SendUpdateMessage(connectionId, urlsCount);
+        }
+
+        public void UrlsFounded(string connectionId, int urlsCount)
+        {
+            this.testHub.SendUrlsFoundedMessage(connectionId, urlsCount);
+        }
+
+        [HttpPost]
+        public ActionResult StopTest()
+        {
+           this.cancelTokenSrc.Cancel();
+
+           return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
     }
 }

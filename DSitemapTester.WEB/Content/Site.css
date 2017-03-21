@@ -23,6 +23,16 @@ textarea {
     padding-left: 25px;
 }
 
+.loading-image{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -50px;
+    width: 100px;
+    height: 100px;
+}
+
 hr{ 
   height: 30px; 
   border-style: solid; 
