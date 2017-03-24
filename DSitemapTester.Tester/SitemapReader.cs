@@ -14,15 +14,15 @@ namespace DSitemapTester.Tester
 
         public IEnumerable<string> GetSitemapUrls(string url)
         {
-            IList<string> sUrls = new List<string>();
+            IList<string> urls = new List<string>();
             try
             {
-                IEnumerable<XElement> xSitemaps = this.GetBottomSitemaps(url);
-                IEnumerable<TesterSitemap> sitemaps = this.GetSitemapEntities(xSitemaps);
+                IEnumerable<XElement> bottom_sitemaps = this.GetBottomSitemaps(url);
+                IEnumerable<TesterSitemap> sitemaps = this.GetSitemapEntities(bottom_sitemaps);
 
                 foreach (TesterSitemap sitemapUrl in sitemaps)
                 {
-                    sUrls.Add(sitemapUrl.Url);
+                    urls.Add(sitemapUrl.Url);
                 }
             }
             catch
@@ -30,7 +30,7 @@ namespace DSitemapTester.Tester
 
             }
 
-            return sUrls;
+            return urls;
         }
 
         private IEnumerable<XElement> GetBottomSitemaps(string url)
@@ -40,15 +40,10 @@ namespace DSitemapTester.Tester
             {
                 XElement sitemap = XElement.Load(this.url);
 
-                // ... XNames.
-                XName xLoc = XName.Get("loc", sitemap.Name.NamespaceName);
-                XName xSitemap = XName.Get("sitemap", sitemap.Name.NamespaceName);
-
-                // ... Loop over url elements.
-                // ... Then access each loc element.
+                XName sitemapName = XName.Get("sitemap", sitemap.Name.NamespaceName);
 
                 IList<XElement> topSitemaps = new List<XElement>();
-                IList<XElement> bottomSitemaps = sitemap.Elements(xSitemap).ToList();
+                IList<XElement> bottomSitemaps = sitemap.Elements(sitemapName).ToList();
                 topSitemaps.Add(sitemap);
 
                 if (bottomSitemaps.Count() > 0)
@@ -62,12 +57,12 @@ namespace DSitemapTester.Tester
                             XElement locElement = topSitemapsElement.Element(sitemapLoc);
 
                             sitemap = XElement.Load(locElement.Value);
-                            xSitemap = XName.Get("sitemap", sitemap.Name.NamespaceName);
+                            sitemapName = XName.Get("sitemap", sitemap.Name.NamespaceName);
 
-                            if (sitemap.Elements(xSitemap).Count() > 0)
+                            if (sitemap.Elements(sitemapName).Count() > 0)
                             {
                                 bottomSitemaps.Remove(topSitemapsElement);
-                                foreach (XElement sitemapChildElement in sitemap.Elements(xSitemap))
+                                foreach (XElement sitemapChildElement in sitemap.Elements(sitemapName))
                                 {
                                     bottomSitemaps.Add(sitemapChildElement);
                                 }
@@ -94,31 +89,31 @@ namespace DSitemapTester.Tester
                 foreach (XElement sitemapElement in sitemaps)
                 {
                     XElement sitemap = sitemapElement;
-                    XName xUrl = XName.Get("url", sitemapElement.Name.NamespaceName);
+                    XName urlName = XName.Get("url", sitemapElement.Name.NamespaceName);
 
-                    if (sitemapElement.Elements(xUrl).Count() == 0)
+                    if (sitemapElement.Elements(urlName).Count() == 0)
                     {
                         XName sitemapLoc = XName.Get("loc", sitemapElement.Name.NamespaceName);
                         XElement locElement = sitemapElement.Element(sitemapLoc);
 
                         this.url = locElement.Value;
                         sitemap = XElement.Load(this.url);
-                        xUrl = XName.Get("url", sitemap.Name.NamespaceName);
+                        urlName = XName.Get("url", sitemap.Name.NamespaceName);
                     }
 
-                    foreach (XElement webPage in sitemap.Elements(xUrl))
+                    foreach (XElement webPage in sitemap.Elements(urlName))
                     {
-                        XName xLoc = XName.Get("loc", sitemap.Name.NamespaceName);
-                        XElement locElement = webPage.Element(xLoc);
+                        XName locName = XName.Get("loc", sitemap.Name.NamespaceName);
+                        XElement locElement = webPage.Element(locName);
 
-                        XName xChangeFreq = XName.Get("changefreq", sitemap.Name.NamespaceName);
-                        XElement changeFreqElement = webPage.Element(xChangeFreq);
+                        XName changeFreqName = XName.Get("changefreq", sitemap.Name.NamespaceName);
+                        XElement changeFreqElement = webPage.Element(changeFreqName);
 
-                        XName xPriority = XName.Get("priority", sitemap.Name.NamespaceName);
-                        XElement priorityElement = webPage.Element(xPriority);
+                        XName priorityName = XName.Get("priority", sitemap.Name.NamespaceName);
+                        XElement priorityElement = webPage.Element(priorityName);
 
-                        XName xLastMod = XName.Get("lastmod", sitemap.Name.NamespaceName);
-                        XElement lastModElement = webPage.Element(xLastMod);
+                        XName lastModName = XName.Get("lastmod", sitemap.Name.NamespaceName);
+                        XElement lastModElement = webPage.Element(lastModName);
 
                         sitemapEntity = new TesterSitemap();
 

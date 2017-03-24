@@ -51,8 +51,7 @@ namespace DSitemapTester.BLL.Configuration
                                          new TestResult()
                                          {
                                              ResponseTime = Math.Round(pres.TestResults.Average(resp => resp.ResponseTime), 3)
-                                         }
-                                     ).First()))
+                                         }).First()))
                 .ForMember(
                          e => e.WrongTestsCount,
                          opt => opt.MapFrom(

@@ -43,7 +43,7 @@ namespace DSitemapTester.Controllers
             {
 
             }
-            return View(testModel);
+            return this.View(testModel);
         }
 
         public void TestCompleted(string connectionId, int urlsCount)
@@ -111,14 +111,14 @@ namespace DSitemapTester.Controllers
 
             try
             {
-                Connections.Add(connectionId, cancelTokenSrc);
+                Connections.Add(connectionId, this.cancelTokenSrc);
 
-                Task test = Task.Factory.StartNew(() =>
-                {
-                    this.testService.RunTest(testId, timeout, testsCount, this.cancelTokenSrc.Token, connectionId);
-                },
-                this.cancelTokenSrc.Token);
-
+                Task test = Task.Factory.StartNew(
+                    () =>
+                    {
+                        this.testService.RunTest(testId, timeout, testsCount, this.cancelTokenSrc.Token, connectionId);
+                    },
+                    this.cancelTokenSrc.Token);
                 test.Wait();
 
                 return new HttpStatusCodeResult(HttpStatusCode.OK);

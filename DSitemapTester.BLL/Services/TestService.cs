@@ -83,7 +83,7 @@ namespace DSitemapTester.BLL.Services
 
             try
             {
-                WebResourceTest webResourceTest = saver.GetNewTest(url);
+                WebResourceTest webResourceTest = this.saver.GetNewTest(url);
                 return webResourceTest.Id;
             }
             catch
@@ -112,19 +112,19 @@ namespace DSitemapTester.BLL.Services
 
                     webResourceTest = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId);
 
-                    IEnumerable<string> sUrls = this.tester.Reader.GetSitemapUrls(webResourceTest.WebResource.Url);
+                    IEnumerable<string> urls = this.tester.Reader.GetSitemapUrls(webResourceTest.WebResource.Url);
 
-                    this.UrlsFounded(connectionId, sUrls.Count());
+                    this.UrlsFounded(connectionId, urls.Count());
 
-                    for (int i = 0; i < sUrls.Count(); i++)
+                    for (int i = 0; i < urls.Count(); i++)
                     {
                         if (!token.IsCancellationRequested)
                         {
-                            string sUrl = sUrls.ElementAt(i);
+                            string url = urls.ElementAt(i);
 
-                            TesterTest test = this.tester.Analyzer.GetResult(sUrl, timeout, testsCount);
+                            TesterTest test = this.tester.Analyzer.GetResult(url, timeout, testsCount);
 
-                            bool saving = saver.SaveTestData(webResourceTest, test);
+                            bool saving = this.saver.SaveTestData(webResourceTest, test);
 
                             if (saving)
                             {
