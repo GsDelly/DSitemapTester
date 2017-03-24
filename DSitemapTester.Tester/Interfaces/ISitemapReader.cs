@@ -9,6 +9,6 @@ namespace DSitemapTester.Tester.Interfaces
 {
     public interface ISitemapReader
     {
-        IEnumerable<Sitemap> GetSitemapUrls(string url);
+        IEnumerable<string> GetSitemapUrls(string url);
     }
 }

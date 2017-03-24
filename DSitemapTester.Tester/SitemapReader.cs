@@ -12,108 +12,141 @@ namespace DSitemapTester.Tester
     {
         private string url;
 
-        public IEnumerable<Sitemap> GetSitemapUrls(string url)
+        public IEnumerable<string> GetSitemapUrls(string url)
         {
-            IEnumerable<XElement> xSitemaps = this.GetBottomSitemaps(url);
-            IEnumerable<Sitemap> sitemaps  = this.GetSitemapEntities(xSitemaps);
+            IList<string> sUrls = new List<string>();
+            try
+            {
+                IEnumerable<XElement> xSitemaps = this.GetBottomSitemaps(url);
+                IEnumerable<TesterSitemap> sitemaps = this.GetSitemapEntities(xSitemaps);
 
-            return sitemaps;
+                foreach (TesterSitemap sitemapUrl in sitemaps)
+                {
+                    sUrls.Add(sitemapUrl.Url);
+                }
+            }
+            catch
+            {
+
+            }
+
+            return sUrls;
         }
 
         private IEnumerable<XElement> GetBottomSitemaps(string url)
         {
             this.url = url + "/sitemap.xml";
-            XElement sitemap = XElement.Load(this.url);
-
-            // ... XNames.
-            XName xLoc = XName.Get("loc", sitemap.Name.NamespaceName);
-            XName xSitemap = XName.Get("sitemap", sitemap.Name.NamespaceName);
-
-            // ... Loop over url elements.
-            // ... Then access each loc element.
-
-            IList<XElement> topSitemaps = new List<XElement>();
-            IList<XElement> bottomSitemaps = sitemap.Elements(xSitemap).ToList();
-            topSitemaps.Add(sitemap);
-
-            if (bottomSitemaps.Count() > 0)
+            try
             {
-                while (!topSitemaps.SequenceEqual(bottomSitemaps))
-                {
-                    topSitemaps = new List<XElement>(bottomSitemaps);
-                    foreach (XElement topSitemapsElement in topSitemaps)
-                    {
-                        sitemap = XElement.Load(topSitemapsElement.Value);
-                        xSitemap = XName.Get("sitemap", sitemap.Name.NamespaceName);
+                XElement sitemap = XElement.Load(this.url);
 
-                        if (sitemap.Elements(xSitemap).Count() > 0)
+                // ... XNames.
+                XName xLoc = XName.Get("loc", sitemap.Name.NamespaceName);
+                XName xSitemap = XName.Get("sitemap", sitemap.Name.NamespaceName);
+
+                // ... Loop over url elements.
+                // ... Then access each loc element.
+
+                IList<XElement> topSitemaps = new List<XElement>();
+                IList<XElement> bottomSitemaps = sitemap.Elements(xSitemap).ToList();
+                topSitemaps.Add(sitemap);
+
+                if (bottomSitemaps.Count() > 0)
+                {
+                    while (!topSitemaps.SequenceEqual(bottomSitemaps))
+                    {
+                        topSitemaps = new List<XElement>(bottomSitemaps);
+                        foreach (XElement topSitemapsElement in topSitemaps)
                         {
-                            bottomSitemaps.Remove(topSitemapsElement);
-                            foreach (XElement sitemapChildElement in sitemap.Elements(xSitemap))
+                            XName sitemapLoc = XName.Get("loc", topSitemapsElement.Name.NamespaceName);
+                            XElement locElement = topSitemapsElement.Element(sitemapLoc);
+
+                            sitemap = XElement.Load(locElement.Value);
+                            xSitemap = XName.Get("sitemap", sitemap.Name.NamespaceName);
+
+                            if (sitemap.Elements(xSitemap).Count() > 0)
                             {
-                                bottomSitemaps.Add(sitemapChildElement);
+                                bottomSitemaps.Remove(topSitemapsElement);
+                                foreach (XElement sitemapChildElement in sitemap.Elements(xSitemap))
+                                {
+                                    bottomSitemaps.Add(sitemapChildElement);
+                                }
                             }
                         }
                     }
                 }
+                return topSitemaps;
             }
-            return topSitemaps;
-        }
-   
-        private IEnumerable<Sitemap> GetSitemapEntities(IEnumerable<XElement> sitemaps)
+            catch
+            {
+                throw;
+            }
+        }   
+
+        private IEnumerable<TesterSitemap> GetSitemapEntities(IEnumerable<XElement> sitemaps)
         {
             IList<string> pageUrls = new List<string>();
-            IList<Sitemap> sitemapEntities = new List<Sitemap>();
-            Sitemap sitemapEntity = new Sitemap();
+            IList<TesterSitemap> sitemapEntities = new List<TesterSitemap>();
+            TesterSitemap sitemapEntity = new TesterSitemap();
 
-            foreach (XElement sitemapElement in sitemaps)
+            try
             {
-                XElement sitemap = sitemapElement;
-                XName xUrl = XName.Get("url", sitemapElement.Name.NamespaceName);
-
-                if (sitemapElement.Elements(xUrl).Count() == 0)
+                foreach (XElement sitemapElement in sitemaps)
                 {
-                    this.url = sitemapElement.Value;
-                    sitemap = XElement.Load(this.url);
-                    xUrl = XName.Get("url", sitemap.Name.NamespaceName);
-                }
+                    XElement sitemap = sitemapElement;
+                    XName xUrl = XName.Get("url", sitemapElement.Name.NamespaceName);
 
-                foreach (XElement webPage in sitemap.Elements(xUrl))
-                {
-                    XName xLoc = XName.Get("loc", sitemap.Name.NamespaceName);
-                    XElement locElement = webPage.Element(xLoc);
-
-                    XName xChangeFreq = XName.Get("changefreq", sitemap.Name.NamespaceName);
-                    XElement changeFreqElement = webPage.Element(xChangeFreq);
-
-                    XName xPriority = XName.Get("priority", sitemap.Name.NamespaceName);
-                    XElement priorityElement = webPage.Element(xPriority);
-
-                    XName xLastMod= XName.Get("lastmod", sitemap.Name.NamespaceName);
-                    XElement lastModElement = webPage.Element(xLastMod);
-
-                    sitemapEntity = new Sitemap();
-
-                    sitemapEntity.Url = locElement.Value;
-
-                    if (changeFreqElement != null)
+                    if (sitemapElement.Elements(xUrl).Count() == 0)
                     {
-                        Frequency frequency;
-                        Enum.TryParse(changeFreqElement.Value.ToUpper(), out frequency);
-                        sitemapEntity.Frequency = frequency;
+                        XName sitemapLoc = XName.Get("loc", sitemapElement.Name.NamespaceName);
+                        XElement locElement = sitemapElement.Element(sitemapLoc);
+
+                        this.url = locElement.Value;
+                        sitemap = XElement.Load(this.url);
+                        xUrl = XName.Get("url", sitemap.Name.NamespaceName);
                     }
 
-                    sitemapEntity.Priority = priorityElement != null ? Convert.ToDouble(priorityElement.Value.Replace('.', ',')) : 0.5;
-
-                    if (lastModElement != null)
+                    foreach (XElement webPage in sitemap.Elements(xUrl))
                     {
-                        sitemapEntity.LastModification = Convert.ToDateTime(lastModElement.Value);
-                    }
+                        XName xLoc = XName.Get("loc", sitemap.Name.NamespaceName);
+                        XElement locElement = webPage.Element(xLoc);
 
-                    sitemapEntities.Add(sitemapEntity);
+                        XName xChangeFreq = XName.Get("changefreq", sitemap.Name.NamespaceName);
+                        XElement changeFreqElement = webPage.Element(xChangeFreq);
+
+                        XName xPriority = XName.Get("priority", sitemap.Name.NamespaceName);
+                        XElement priorityElement = webPage.Element(xPriority);
+
+                        XName xLastMod = XName.Get("lastmod", sitemap.Name.NamespaceName);
+                        XElement lastModElement = webPage.Element(xLastMod);
+
+                        sitemapEntity = new TesterSitemap();
+
+                        sitemapEntity.Url = locElement.Value;
+
+                        if (changeFreqElement != null)
+                        {
+                            Frequency frequency;
+                            Enum.TryParse(changeFreqElement.Value.ToUpper(), out frequency);
+                            sitemapEntity.Frequency = frequency;
+                        }
+
+                        sitemapEntity.Priority = priorityElement != null ? Convert.ToDouble(priorityElement.Value.Replace('.', ',')) : 0.5;
+
+                        if (lastModElement != null)
+                        {
+                            sitemapEntity.LastModification = Convert.ToDateTime(lastModElement.Value);
+                        }
+
+                        sitemapEntities.Add(sitemapEntity);
+                    }
                 }
+                return sitemapEntities;
             }
-            return sitemapEntities;
+            catch
+            {
+                throw;
+            }
         }
     }
 }

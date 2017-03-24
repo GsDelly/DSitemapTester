@@ -14,35 +14,30 @@ namespace DSitemapTester.Tester
 {
     public class PerformanceAnalyzer : IPerformanceAnalyzer
     {
-        public IEnumerable<Test> GetConnectionResults(IEnumerable<string> urls)
+        public TesterTest GetResult(string url, int timeout, int testsCount)
         {
-            int testsCount = ConnectionSettings.GetTestsCount();
-            double interval = ConnectionSettings.GetInterval();
-            int timeout = ConnectionSettings.GetTimeout();
+            TesterTest test = new TesterTest();
 
-            return this.GetResults(urls, testsCount, interval, timeout);
+            test = this.GetTestResult(url, timeout, testsCount);
+            test.Url = url;
+            test.TestsCount = testsCount;
+            test.Date = DateTime.Now;
+
+            return test;
         }
 
-        public IEnumerable<Test> GetConnectionResults(IEnumerable<string> urls, int testsCount, double interval, int timeout)
+        private TesterTest GetTestResult(string url, int timeout, int testsCount)
         {
+            IList<Task<TesterTestResult>> tasks = new List<Task<TesterTestResult>>();
+            IList<TesterTestResult> testResults = new List<TesterTestResult>();
 
-            IEnumerable<Test> performanceTest = this.GetResults(urls, testsCount, interval, timeout);
+            TesterTest test = new TesterTest();
 
-            return performanceTest;
-        }
-
-        private Test GetTestResults (string url, int testsCount, double interval, int timeout)
-        {
-            IList<Task<TestResult>> tasks = new List<Task<TestResult>>();
-            IList<TestResult> testResults = new List<TestResult>();
-
-            Test test = new Test();
-            Trace.WriteLine(String.Format("New task created {0} url", url));
             for (int i = 0; i < testsCount; i++)
             {
-                tasks.Add(Task<TestResult>.Factory.StartNew(() =>
+                tasks.Add(Task<TesterTestResult>.Factory.StartNew(() =>
                 {
-                    TestResult result = new TestResult();
+                    TesterTestResult result = new TesterTestResult();
                     double time = 0;
 
                     try
@@ -69,12 +64,10 @@ namespace DSitemapTester.Tester
 
                     return result;
                 }));
-
-                Task.Delay(Convert.ToInt32(interval * 1000)).Wait();
             }
             Task.WaitAll(tasks.ToArray());
 
-            foreach (Task<TestResult> task in tasks)
+            foreach (Task<TesterTestResult> task in tasks)
             {
                 testResults.Add(task.Result);
             }
@@ -82,24 +75,6 @@ namespace DSitemapTester.Tester
             test.TestResults = testResults;
 
             return test;
-        }
-
-        private IEnumerable<Test> GetResults(IEnumerable<string> urls, int testsCount, double interval, int timeout)
-        {
-            IList<Test> tests = new List<Test>();
-
-            foreach (string url in urls)
-            {
-                Test test = new Test();
-
-                test = this.GetTestResults(url, testsCount, interval, timeout);
-                test.Url = url;
-                test.TestsCount = testsCount;
-                test.Date = DateTime.Now;
-
-                tests.Add(test);
-            }
-            return tests;
         }
 
         private double GetConnectionTime(string url, int timeout)

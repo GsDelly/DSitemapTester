@@ -1,126 +1,164 @@
 ﻿using AutoMapper;
 using DSitemapTester.BLL.Configuration;
 using DSitemapTester.BLL.Dtos;
+using DSitemapTester.BLL.Entities;
 using DSitemapTester.BLL.Interfaces;
 using DSitemapTester.BLL.Utilities;
 using DSitemapTester.DAL.Interfaces;
 using DSitemapTester.Entities.Entities;
-using DSitemapTester.Tester;
+using DSitemapTester.Tester.Configuration.Connection;
 using DSitemapTester.Tester.Dtos;
+using DSitemapTester.Tester.Entities;
 using DSitemapTester.Tester.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DSitemapTester.BLL.Services
 {
     public class TestService : ITestService
     {
-        private readonly IUnitOfWork dataUnit;
         private readonly ISitemapTester tester;
+        private readonly ISaveService saver;
+        private readonly IUnitOfWork dataUnit;
 
-        public TestService(IUnitOfWork unitOfWork, ISitemapTester tester)
+        public TestService(ISitemapTester tester, ISaveService saver, IUnitOfWork dataUnit)
         {
-            this.dataUnit = unitOfWork;
             this.tester = tester;
+            this.saver = saver;
+            this.dataUnit = dataUnit;
         }
 
-        public PresentationWebResourceDto GetTestResults(string url)
+        public Action<string, int> OnTestFinished { get; set; }
+        public Action<string, int> OnUrlsFounded { get; set; }
+        public Action<string> OnTestDone { get; set; }
+
+        public void TestDone(string connectionId)
         {
-            url = UrlAdaptor.GetUrl(url); 
-
-            WebResourceDto testResults = tester.GetTestResults(url);
-
-            PresentationAutomapperConfig.Configure();
-
-            PresentationWebResourceDto presentationTestResults = new PresentationWebResourceDto()
-            {
-                Tests = new List<PresentationWebResourceTestDto>()
-            };
-
-            presentationTestResults.Url = testResults.Url;
-
-            presentationTestResults.Tests.Add(Mapper.Map<WebResourceDto, PresentationWebResourceTestDto>(testResults));
-
-            foreach (PresentationWebResourceTestDto test in presentationTestResults.Tests)
-            {
-                test.TotalTestsCount = test.Tests.Sum(res => res.TestsCount);
-                test.TotalWrongTestsCount = test.Tests.Sum(res => res.WrongTestsCount);
-                test.WrongUrls = test.Tests.Where(res => res.WrongTestsCount == res.TestsCount).Count();
-                test.SuccessfulUrls = test.Tests.Where(res => res.WrongTestsCount == 0).Count();
-                test.Tests = test.Tests.OrderByDescending(res => res.AverageResponseTime.ResponseTime).ToList();
-            }
-
-            this.SaveTestData(testResults);
-
-            return presentationTestResults;
+            Connections.Remove(connectionId);
+            this.OnTestDone(connectionId);
         }
 
-        public bool SaveTestData(WebResourceDto webResource)
+        public void TestFinished(string coonectionId, int urlsCount)
         {
-            EntitiesAutomapperConfig.Configure();
+            this.OnTestFinished(coonectionId, urlsCount);
+        }
+
+        public void UrlsFounded(string coonectionId, int totalUrlsCount)
+        {
+            this.OnUrlsFounded(coonectionId, totalUrlsCount);
+        }
+
+        public PresentationWebResourceTestDto GetTest(int testId)
+        {
             try
             {
-                IEnumerable<WebResource> resources = this.dataUnit.GetRepository<WebResource>().Get((x) => x.Url == webResource.Url);
-                WebResource resource;
+                PresentationAutomapperConfig.Configure();
 
-                if (resources.Count() > 0)
-                {
-                    resource = resources.First();
-                }
-                else
-                {
-                    resource = new WebResource()
-                    {
-                        Url = webResource.Url,
-                        SitemapResources = new List<SitemapResource>(),
-                        Tests = new List<WebResourceTest>()                    
-                    };
-                    this.dataUnit.GetRepository<WebResource>().Insert(resource);
-                }
+                WebResourceTest test = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId);
 
-                WebResourceTest webResourceTest = new WebResourceTest()
-                {
-                    Date = webResource.Tests.First().Date,
-                    Duration = webResource.Tests.Last().Date - webResource.Tests.First().Date,
-                    Tests = new List<Test>()
-                };
+                PresentationWebResourceTestDto presentationTestResults = new PresentationWebResourceTestDto();
 
-                foreach (TestDto test in webResource.Tests)
-                {
-                    Test testEntity = new Test();
+                presentationTestResults = Mapper.Map<WebResourceTest, PresentationWebResourceTestDto>(test);
 
-                    IEnumerable<SitemapResource> sitemaps = resource.SitemapResources.Where((x) => x.Url == test.Url);
+                presentationTestResults.TotalTestsCount = presentationTestResults.Tests.Sum(res => res.TestsCount);
+                presentationTestResults.TotalWrongTestsCount = presentationTestResults.Tests.Sum(res => res.WrongTestsCount);
+                presentationTestResults.WrongUrls = presentationTestResults.Tests.Where(res => res.WrongTestsCount == res.TestsCount).Count();
+                presentationTestResults.SuccessfulUrls = presentationTestResults.Tests.Where(res => res.WrongTestsCount == 0).Count();
+                presentationTestResults.TotalUrls = presentationTestResults.Tests.Count();
 
-                    testEntity = Mapper.Map<TestDto, Test>(test);
-
-                    if (resource.SitemapResources.Count() > 0)
-                    {
-                        testEntity.SitemapResource = sitemaps.First();
-                    }
-                    else
-                    {
-                        SitemapResource sitemap = new SitemapResource()
-                        {
-                            Url = test.Url,
-                            WebResource = resource
-                        };
-                        testEntity.SitemapResource = sitemap;
-                    }
-                    webResourceTest.Tests.Add(testEntity);
-                }
-                resource.Tests.Add(webResourceTest);
-
-                this.dataUnit.SaveChanges();
+                return presentationTestResults;
             }
-            catch (Exception e)
+            catch
             {
-
+                throw;
             }
-
-            return true;
         }
+
+        public int GetTestId(string url)
+        {
+            url = UrlAdaptor.GetUrl(url);
+
+            try
+            {
+                WebResourceTest webResourceTest = saver.GetNewTest(url);
+                return webResourceTest.Id;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void RunTest(int testId,  int timeout, int testsCount, CancellationToken token, string connectionId)
+        {
+            if (!token.IsCancellationRequested)
+            {
+                WebResourceTest webResourceTest;
+                try
+                {
+                    PresentationAutomapperConfig.Configure();
+                    if (timeout == 0)
+                    {
+                        timeout = ConnectionSettings.GetTimeout();
+                    }
+                    if (testsCount == 0)
+                    {
+                        testsCount = ConnectionSettings.GetTestsCount();
+                    }
+                    double interval = ConnectionSettings.GetInterval();
+
+                    webResourceTest = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId);
+
+                    IEnumerable<string> sUrls = this.tester.Reader.GetSitemapUrls(webResourceTest.WebResource.Url);
+
+                    this.UrlsFounded(connectionId, sUrls.Count());
+
+                    for (int i = 0; i < sUrls.Count(); i++)
+                    {
+                        if (!token.IsCancellationRequested)
+                        {
+                            string sUrl = sUrls.ElementAt(i);
+
+                            TesterTest test = this.tester.Analyzer.GetResult(sUrl, timeout, testsCount);
+
+                            bool saving = saver.SaveTestData(webResourceTest, test);
+
+                            if (saving)
+                            {
+                                this.TestFinished(connectionId, i + 1);
+                            }
+
+                            Task.Delay(Convert.ToInt32(interval * 1000)).Wait();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                catch
+                {
+
+                }
+                this.TestDone(connectionId);
+            }
+        }
+
+        public int Count(int testId)
+        {
+            try
+            {
+                int testsCount = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId).Tests.Count();
+                return testsCount;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
     }
 }

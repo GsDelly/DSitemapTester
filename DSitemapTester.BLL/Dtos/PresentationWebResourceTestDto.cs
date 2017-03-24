@@ -9,13 +9,11 @@ namespace DSitemapTester.BLL.Dtos
 {
     public class PresentationWebResourceTestDto
     {
-        public string Date { get; set; }
-
-        public double Duration { get; set; }
-
         public int TotalTestsCount { get; set; }
 
         public int TotalWrongTestsCount { get; set; }
+
+        public int TotalUrls { get; set; }
 
         public int SuccessfulUrls { get; set; }
 

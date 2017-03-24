@@ -1,207 +1,368 @@
 ﻿@using DSitemapTester.BLL.Dtos;
 
-@model PresentationWebResourceDto
+@model TestViewModel
 
 @{
     ViewBag.Title = "Test";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="row">
-    <div class="col-md-6">
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title">Total tests</h3>
-                <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+@section styles {
+    @Styles.Render("~/Content/DataTableStyles")
+}
+<html>
+<head>
+</head>
+<body>
+    <div class="box">
+        <div class="box-body">
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <span class="input-link"></span>
+                </div>
+                <input id="lastUrl" type="text" class="form-control" disabled="disabled" value="">
+                <span class="input-group-btn">
+                    <button id="test-state" type="submit" class="btn btn-danger rounded" onclick="stopTest()">Stop Test</button>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Total tests</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div id="total-chart"></div>
                 </div>
             </div>
-            <div class="box-body">
-                <div id="total-chart"></div>
-            </div>
         </div>
-    </div>
-    <div class="col-md-6">
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title">Url Tests</h3>
-                <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+        <div class="col-md-6">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Url Tests</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div id="url-chart"></div>
                 </div>
             </div>
-            <div class="box-body">
-                <div id="url-chart"></div>
+        </div>
+    </div>
+    <div id="loading" class="loading-image">
+        <div>
+            <h7>Please wait...</h7>
+            <img src="~/Content/icons/loading.gif" />
+        </div>
+    </div>
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">Url Tests</h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="box">
-    <div class="box-header with-border">
-        <h3 class="box-title">Url Tests</h3>
-        <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+        <div class="box-body">
+            <div id="url-line-chart"></div>
         </div>
     </div>
-    <div class="box-body">
-        <div id="url-line-chart"></div>
-    </div>
-</div>
 
-<div class="box">
-    <div class="box-header with-border">
-        <h2 style="text-align:center">WebResource : @Model.Url</h2>
+    <div class="box">
+        <div class="box-header with-border">
+            <h2 style="text-align:center">WebResource : @Model.Url</h2>
 
-        <h4 style="text-align:center">Date: @Model.Tests.First().Date</h4>
-        <h4 style="text-align:center">Test is completed in @Model.Tests.First().Duration.ToString("0.00") seconds</h4>
+            <h3 id="test-date" style="text-align:center">Test date : </h3>
+            <h3 id="urls-count" style="text-align:center">Urls : </h3>
+        </div>
+        <div class="box-body">
+            <table id="testResults" class="table table-hover table-bordered table-striped table-condensed"
+                   cellspacing="1">
+                <thead>
+                    <tr>
+                        <th scope="col">Url</th>
+                        <th scope="col">Minimal Response Time</th>
+                        <th scope="col">Average Response Time</th>
+                        <th scope="col">Maximal Response Time</th>
+                        <th scope="col">Tests Count</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
-    <div class="box-body">
-        <table id="testResults" class="table table-hover table-bordered table-striped table-condensed"
-               cellspacing="1">
-            <thead>
-                <tr>
-                    <th scope="col">Url</th>
-                    <th scope="col">Minimal Response Time</th>
-                    <th scope="col">Average Response Time</th>
-                    <th scope="col">Maximal Response Time</th>
-                    <th scope="col">Tests Count</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (PresentationWebResourceTestDto webResourceTest in Model.Tests)
+</body>
+</html>
+
+@section scripts {
+
+    @Scripts.Render("~/Scripts/SignalR")
+    @Scripts.Render("~/Scripts/DataTable")
+    @Scripts.Render("~/Scripts/GoogleCharts")
+    <script src="signalr/hubs"></script>
+
+    @*window.onload*@
+    <script>
+        window.onload = function () {
+            startLoadingAnimation()
+        }
+    </script>
+
+    @*window.onbeforeunload*@
+    <script>
+            window.onbeforeunload = unloadFunction;
+            function unloadFunction()
             {
-                foreach (PresentationTestDto test in webResourceTest.Tests)
+                stopTest();
+            }
+    </script> 
+
+    @*stopTest*@
+    <script>
+        function stopTest()
+        {
+            var id = $.connection.hub.id;
+            $.post("@Url.Action("StopTest", "Test")",
+         {connectionId: id})
+                .done(function() {
+                    $('#test-state').removeClass("btn-danger").addClass("btn-success");
+                    $('#test-state').prop('onclick', null).html('Done');
+                });
+        }
+    </script>
+
+    @*signalR*@
+    <script>
+        $(function () {
+            // Declare a proxy to reference the hub.
+            var hub = $.connection.testHub;
+
+            hub.client.urlsFounded = function (urlsCount) {
+                stopLoadingAnimation();
+                document.getElementById("urls-count").innerHTML = "Urls : " + urlsCount;
+                document.getElementById("test-date").innerHTML = "Test Date : " + dateTime();
+            };
+
+            hub.client.testDone = function () {
+                $('#test-state').removeClass("btn-danger").addClass("btn-success");
+                $('#test-state').prop('onclick', null).html('Done');
+            };
+
+            hub.client.testFinished = function (urlsCount) {
+                var id = @Model.TestId;
+                appendData(id, urlsCount);
+            };
+
+            // Start the connection.
+            $.connection.hub.start(function () {
+                var id = $.connection.hub.id;
+                $.post("@Url.Action("RunTest","Test")",
+               { testId : @Model.TestId, timeout: @Model.Timeout, testsCount: @Model.TestsCount, connectionId: id});
+            });
+        });
+    </script>
+
+    @*AppendData*@
+    <script>
+        function appendData(testId, urlsCount) {
+            console.log(urlsCount);
+
+            var testTable = $('#testResults').dataTable();;
+
+            $.ajax ({
+                url: '/Test/LoadTestResults?testId=' + testId,
+                type: 'POST',
+                datatype: 'json',
+                data: {
+                    'start': urlsCount - 1,
+                },
+                dataSrc: 'data',
+                success: function(response)
                 {
-                        <tr class="cursor-pointer">
-                            <td>
-                                @if (test.WrongTestsCount == 0)
-                                {
-                                    <img src="~/Content/icons/icon_success.png" />
-                                    <a href='@Html.DisplayFor(res => test.Url)'>@Html.DisplayFor(res => test.Url)</a>
-                                }
-                                else
-                                {
-                                    if (test.WrongTestsCount == test.TestsCount)
-                                    {
-                                        <img src="~/Content/icons/icon_wrong.png" />
-                                        <a href='@Html.DisplayFor(res => test.Url)'>@Html.DisplayFor(res => test.Url)</a>
-                                    }
-                                    else
-                                    {
-                                        <img src="~/Content/icons/icon_warning.png" />
-                                        <a href = '@Html.DisplayFor(res => test.Url)'>@Html.DisplayFor(res => test.Url)</a>
-                                    }
-                                }
-                            </td>
-                            <td> @Html.DisplayFor(res => test.MinimalResponseTime.ResponseTime) </td>
-                            <td> @Html.DisplayFor(res => test.AverageResponseTime.ResponseTime) </td>
-                            <td> @Html.DisplayFor(res => test.MaximalResponseTime.ResponseTime) </td>
-                            <td> @Html.DisplayFor(res => test.TestsCount) </td>
-                        </tr>
+                    var data = response.data;
+
+                    console.log(data)
+
+                    appendTableData(testTable, data);
+
+                    renderPieCharts(data);
+
+                    renderLineChart($('#testResults').dataTable().fnGetData());
+
+                    renderLastUrlText(data.Tests[data.Tests.length-1].Url)
+                }
+            });
+        };
+    </script>
+
+    @*RenderLineChart*@
+    <script type="text/javascript">
+                function renderLineChart(results)
+                {
+                    console.log('line');
+                    google.charts.load('current', {'packages':['corechart']});
+                    google.charts.setOnLoadCallback(drawUrlLineChart);
+
+                    function drawUrlLineChart() {
+                        var data = new google.visualization.DataTable();
+                        data.addColumn('string', 'Url');
+                        data.addColumn('number', 'Minimum');
+                        data.addColumn('number', 'Average');
+                        data.addColumn('number', 'Maximum');
+                        if (results.length > 15)
+                        {
+                            for(var i = results.length - 15; i < results.length; i++)
+                            {
+                                data.addRow([
+                                    results[i][0],
+                                    results[i][1],
+                                    results[i][2],
+                                    results[i][3]
+                                ]);
+                            }
+                        }
+                        else
+                        {
+                            for(var i = 0; i < results.length; i++)
+                            {
+                                data.addRow([
+                                    results[i][0],
+                                    results[i][1],
+                                    results[i][2],
+                                    results[i][3]
+                                ]);
+                            }
+                        }
+
+                        var options = {
+                            title: 'Url Performance',
+                            curveType: 'function',
+                            legend: { position: 'bottom' },
+                            animation: {
+                            duration: 1000,
+                            easing: 'linear'
+                        }
+                        };
+
+
+                        var chart = new google.visualization.LineChart(document.getElementById('url-line-chart'));
+
+                        chart.draw(data, options);
                     }
                 }
-            </tbody>
-        </table>
-    </div>
-</div>
-@section scripts {
-    @Scripts.Render("~/Scripts/GoogleCharts")
-
-    <script type="text/javascript">
-        google.charts.load('current', { 'packages': ['corechart'] });
-        google.charts.setOnLoadCallback(drawTotalChart);
-        google.charts.setOnLoadCallback(drawUrlChart);
-
-        function drawTotalChart() {
-
-            var data = google.visualization.arrayToDataTable([
-              ['Task', 'Tests'],
-              ['Successful', @Model.Tests.First().TotalTestsCount - @Model.Tests.First().TotalWrongTestsCount],
-              ['Wrong',  @Model.Tests.First().TotalWrongTestsCount],
-            ]);
-
-            var options = {
-                title: 'Total Tests : ' + @Model.Tests.First().TotalTestsCount,
-                is3D: true,
-                colors: ['green', 'orange']
-            }
-
-            var chart = new google.visualization.PieChart(document.getElementById('total-chart'));
-
-            chart.draw(data, options);
-        }
-        function drawUrlChart() {
-
-            var data = google.visualization.arrayToDataTable([
-              ['Task', 'Url'],
-              ['Successful', @Model.Tests.First().SuccessfulUrls],
-              ['Wrong', @Model.Tests.First().WrongUrls],
-              ['Warning',  @Model.Tests.First().Tests.Count - (@Model.Tests.First().SuccessfulUrls + @Model.Tests.First().WrongUrls)],
-            ]);
-
-            var options = {
-                title: 'Total Urls : ' + @Model.Tests.First().Tests.Count,
-                vAxis: {minValue: 0,
-                    maxValue: 100,
-                    format: "percent"
-                },
-                sliceVisibilityThreshold:0,
-                is3D: true,
-                colors: ['red', 'blue', 'orange']
-            };
-
-
-            var chart = new google.visualization.PieChart(document.getElementById('url-chart'));
-
-            chart.draw(data, options);
-        }
     </script>
 
-    <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawUrlLineChart);
+    @*AppendTableData*@
+    <script>
+                function appendTableData(tableElement, data) {
+                    console.log('table');
+                    for(var i = 0; i < data.Tests.length; i++)
+                    {
+                        tableElement.fnAddData([
+                                "<a href=" +  data.Tests[i].Url + ">" +  data.Tests[i].Url + '</a>',
+                                data.Tests[i].MinimalResponseTime.ResponseTime,
+                                data.Tests[i].AverageResponseTime.ResponseTime,
+                                data.Tests[i].MaximalResponseTime.ResponseTime,
+                                data.Tests[i].TestsCount,
+                        ]);
 
-        function drawUrlLineChart() {
-            var data = new google.visualization.DataTable();
-
-            var data=[];
-            var Header= ['Url', 'Maximal', 'Average', 'Minimum'];
-
-            data.push(Header);
-
-
-            @foreach (PresentationTestDto test in Model.Tests.First().Tests)
-          {
-          <text>
-            var temp=[];
-            temp.push('@test.Url.Split(new string[] { "://" }, StringSplitOptions.None)[1]');
-            temp.push(@test.MaximalResponseTime.ResponseTime.ToString("0.00").Replace(',', '.'));
-            temp.push(@test.AverageResponseTime.ResponseTime.ToString("0.00").Replace(',', '.'));
-            temp.push(@test.MinimalResponseTime.ResponseTime.ToString("0.00").Replace(',', '.'));
-
-            data.push(temp);
-            </text>
-          };
-
-            var options = {
-                title: 'Url Performance',
-                curveType: 'function',
-                legend: { position: 'bottom' }
-            };
-
-            console.log(data);
-            var chartdata = new google.visualization.arrayToDataTable(data);
-
-            var chart = new google.visualization.LineChart(document.getElementById('url-line-chart'));
-
-            chart.draw(chartdata, options);
-        }
+                        tableElement.fnSort( [ [3,'desc'] ] );
+                    }
+                }
     </script>
 
+    @*RenderePieCharts*@
+    <script>
+                function renderPieCharts(results) {
+                    console.log('pie');
+                    google.charts.load('current', { 'packages': ['corechart'] });
+                    google.charts.setOnLoadCallback(drawTotalChart);
+                    google.charts.setOnLoadCallback(drawUrlChart);
+
+                    function drawTotalChart() {
+
+                        var data = google.visualization.arrayToDataTable([
+                           ['Task', 'Tests'],
+                           ['Successful', results.TotalTestsCount - results.TotalWrongTestsCount],
+                           ['Wrong',   results.TotalWrongTestsCount],
+                        ]);
+
+                        var options = {
+                            title: 'Total Tests : ' + results.TotalTestsCount,
+                            is3D: true,
+                            colors: ['green', 'orange']
+                        }
+
+                        var chart = new google.visualization.PieChart(document.getElementById('total-chart'));
+
+                        chart.draw(data, options);
+                    }
+                    function drawUrlChart() {
+
+                        var data = google.visualization.arrayToDataTable([
+                          ['Task', 'Url'],
+                          ['Successful',results.SuccessfulUrls],
+                          ['Wrong', results.WrongUrls],
+                          ['Warning',  results.TotalUrls - (results.SuccessfulUrls + results.WrongUrls)],
+                        ]);
+
+                        var options = {
+                            title: 'Total Urls : ' + results.TotalUrls,
+                            vAxis: {minValue: 0,
+                                maxValue: 100,
+                                format: "percent"
+                            },
+                            sliceVisibilityThreshold:0,
+                            is3D: true,
+                            colors: ['red', 'blue', 'orange']
+                        };
+
+                        var chart = new google.visualization.PieChart(document.getElementById('url-chart'));
+
+                        chart.draw(data, options);
+                    }
+                }
+    </script>
+
+    @*renderLastUrlText*@
+    <script>
+                function renderLastUrlText(url) {
+                    var lastUrl = document.getElementById('lastUrl');
+                    lastUrl.value = url;
+                }
+    </script>
+
+    @*loading*@
+    <script>
+        function startLoadingAnimation()
+        {
+            document.getElementById("loading").style.display = "block";
+        }
+
+        function stopLoadingAnimation()
+        {
+            document.getElementById("loading").style.display = "none";
+        }
+    </script>
+    
+    @*dateTime*@
+    <script>
+        function dateTime()
+        {
+            var currentdate = new Date();
+            currentdata = Date.now; 
+            var datetime = currentdate.getDate() + "/"
+                            + (currentdate.getMonth()+1)  + "/" 
+                            + currentdate.getFullYear() + " - "  
+                            + currentdate.getHours() + ":"  
+                            + currentdate.getMinutes() + ":" 
+                            + currentdate.getSeconds();
+            console.log(datetime);
+            return datetime;
+        }
+    </script>
 }
-
-
-
-
-
-
-

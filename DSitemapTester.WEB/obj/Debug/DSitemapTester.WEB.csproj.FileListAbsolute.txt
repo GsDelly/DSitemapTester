@@ -1,4 +1,3 @@
-D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\obj\Debug\DSitemapTester.WEB.csprojResolveAssemblyReference.cache
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\ApplicationInsights.config
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\roslyn\csc.exe
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -28,6 +27,8 @@ D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.AI.ServerTelem
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.AI.Web.dll
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.AI.WindowsServer.dll
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.ApplicationInsights.dll
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.AspNet.SignalR.Core.dll
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.AspNetCore.Antiforgery.dll
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.AspNetCore.Authorization.dll
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.AspNetCore.Cors.dll
@@ -86,10 +87,12 @@ D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.Extensions.Pla
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.Extensions.Primitives.dll
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.Extensions.WebEncoders.dll
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.Net.Http.Headers.dll
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.Owin.dll
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.Owin.Security.dll
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.Web.Infrastructure.dll
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Newtonsoft.Json.dll
-D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\PagedList.dll
-D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\PagedList.Mvc.dll
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Owin.dll
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\System.AppContext.dll
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\System.Buffers.dll
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\System.Collections.Immutable.dll
@@ -136,6 +139,8 @@ D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.AI.ServerTelem
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.AI.Web.xml
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.AI.WindowsServer.xml
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.ApplicationInsights.xml
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.AspNet.SignalR.Core.xml
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.AspNetCore.Antiforgery.xml
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.AspNetCore.Authorization.xml
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.AspNetCore.Cors.xml
@@ -190,9 +195,10 @@ D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.Extensions.Pla
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.Extensions.Primitives.xml
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.Extensions.WebEncoders.xml
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.Net.Http.Headers.xml
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.Owin.xml
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Microsoft.Owin.Security.xml
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\Newtonsoft.Json.xml
-D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\PagedList.xml
-D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\PagedList.Mvc.xml
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\System.Diagnostics.DiagnosticSource.xml
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\System.Text.Encodings.Web.xml
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\System.Web.Optimization.xml
@@ -206,5 +212,6 @@ D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\DSitemapTester.DAL.pdb
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\DSitemapTester.DataAccessInterfaces.pdb
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\DSitemapTester.Entities.pdb
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\bin\EntityFramework.xml
+D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\obj\Debug\DSitemapTester.WEB.csprojResolveAssemblyReference.cache
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\obj\Debug\DSitemapTester.dll
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.WEB\obj\Debug\DSitemapTester.pdb

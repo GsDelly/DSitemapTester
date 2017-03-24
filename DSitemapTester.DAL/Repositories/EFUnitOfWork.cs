@@ -1,6 +1,7 @@
 ﻿using DSitemapTester.DAL.EFContext;
 using DSitemapTester.DAL.Interfaces;
 using System;
+using System.Threading.Tasks;
 
 namespace DSitemapTester.DAL.Repositories
 {
@@ -24,6 +25,12 @@ namespace DSitemapTester.DAL.Repositories
         {
             this.db.SaveChanges();
         }
+
+        public Task SaveAsync()
+        {
+            return this.db.SaveChangesAsync();
+        }
+
 
         public virtual void Dispose(bool disposing)
         {

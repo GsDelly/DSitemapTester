@@ -20,8 +20,12 @@ namespace DSitemapTester.Controllers
         public ActionResult Checkup()
         {
             string selectedUrl = Request["select-url"];
+            var a = Request.Form["timeout"];
 
-            return RedirectToAction("Index", "Test", new { selectedUrl });
+            int timeout = Request.Form["timeout"] != string.Empty ? Convert.ToInt32(Request.Form["timeout"]) : 0;
+            int testsCount = Request.Form["testsCount"] != string.Empty ? Convert.ToInt32(Request.Form["testsCount"]) : 0;
+
+            return RedirectToAction("Index", "Test", new { selectedUrl, timeout, testsCount });
         }
     }
 }

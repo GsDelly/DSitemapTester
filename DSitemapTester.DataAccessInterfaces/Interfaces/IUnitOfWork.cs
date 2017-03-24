@@ -11,5 +11,7 @@ namespace DSitemapTester.DAL.Interfaces
         IRepository<T> GetRepository<T>() where T : class;
 
         void SaveChanges();
+
+        Task SaveAsync();
     }
 }
