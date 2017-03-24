@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DSitemapTester.BLL.Configuration;
 using DSitemapTester.BLL.Dtos;
+using DSitemapTester.BLL.Entities;
 using DSitemapTester.BLL.Interfaces;
 using DSitemapTester.BLL.Utilities;
 using DSitemapTester.DAL.Interfaces;
@@ -32,6 +33,13 @@ namespace DSitemapTester.BLL.Services
 
         public Action<string, int> OnTestFinished { get; set; }
         public Action<string, int> OnUrlsFounded { get; set; }
+        public Action<string> OnTestDone { get; set; }
+
+        public void TestDone(string connectionId)
+        {
+            Connections.Remove(connectionId);
+            this.OnTestDone(connectionId);
+        }
 
         public void TestFinished(string coonectionId, int urlsCount)
         {
@@ -45,80 +53,111 @@ namespace DSitemapTester.BLL.Services
 
         public PresentationWebResourceTestDto GetTest(int testId)
         {
-            PresentationAutomapperConfig.Configure();
+            try
+            {
+                PresentationAutomapperConfig.Configure();
 
-            WebResourceTest test = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId);
+                WebResourceTest test = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId);
 
-            PresentationWebResourceTestDto presentationTestResults = new PresentationWebResourceTestDto();
+                PresentationWebResourceTestDto presentationTestResults = new PresentationWebResourceTestDto();
 
-            presentationTestResults = Mapper.Map<WebResourceTest, PresentationWebResourceTestDto>(test);
+                presentationTestResults = Mapper.Map<WebResourceTest, PresentationWebResourceTestDto>(test);
 
-            presentationTestResults.TotalTestsCount = presentationTestResults.Tests.Sum(res => res.TestsCount);
-            presentationTestResults.TotalWrongTestsCount = presentationTestResults.Tests.Sum(res => res.WrongTestsCount);
-            presentationTestResults.WrongUrls = presentationTestResults.Tests.Where(res => res.WrongTestsCount == res.TestsCount).Count();
-            presentationTestResults.SuccessfulUrls = presentationTestResults.Tests.Where(res => res.WrongTestsCount == 0).Count();
-            presentationTestResults.TotalUrls = presentationTestResults.Tests.Count();
+                presentationTestResults.TotalTestsCount = presentationTestResults.Tests.Sum(res => res.TestsCount);
+                presentationTestResults.TotalWrongTestsCount = presentationTestResults.Tests.Sum(res => res.WrongTestsCount);
+                presentationTestResults.WrongUrls = presentationTestResults.Tests.Where(res => res.WrongTestsCount == res.TestsCount).Count();
+                presentationTestResults.SuccessfulUrls = presentationTestResults.Tests.Where(res => res.WrongTestsCount == 0).Count();
+                presentationTestResults.TotalUrls = presentationTestResults.Tests.Count();
 
-            return presentationTestResults;
+                return presentationTestResults;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public int GetTestId(string url)
         {
             url = UrlAdaptor.GetUrl(url);
 
-            WebResourceTest webResourceTest = saver.GetNewTest(url);
-
-            return webResourceTest.Id;
+            try
+            {
+                WebResourceTest webResourceTest = saver.GetNewTest(url);
+                return webResourceTest.Id;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void RunTest(int testId,  int timeout, int testsCount, CancellationToken token, string connectionId)
         {
             if (!token.IsCancellationRequested)
             {
-                PresentationAutomapperConfig.Configure();
-                if (timeout == 0)
+                WebResourceTest webResourceTest;
+                try
                 {
-                    timeout = ConnectionSettings.GetTimeout();
-                }
-                if (testsCount == 0)
-                {
-                    testsCount = ConnectionSettings.GetTestsCount();
-                }
-                double interval = ConnectionSettings.GetInterval();
-
-                WebResourceTest webResourceTest = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId);
-
-                IEnumerable<string> sUrls = this.tester.Reader.GetSitemapUrls(webResourceTest.WebResource.Url);
-
-                this.UrlsFounded(connectionId, sUrls.Count());
-
-                for (int i = 0; i < sUrls.Count(); i++)
-                {
-                    if (!token.IsCancellationRequested)
+                    PresentationAutomapperConfig.Configure();
+                    if (timeout == 0)
                     {
-                        string sUrl = sUrls.ElementAt(i);
-
-                        TesterTest test = this.tester.Analyzer.GetResult(sUrl, timeout, testsCount);
-
-                        saver.SaveTestData(webResourceTest, test);
-
-                        this.TestFinished(connectionId, i + 1);
-
-                        Task.Delay(Convert.ToInt32(interval * 1000)).Wait();
+                        timeout = ConnectionSettings.GetTimeout();
                     }
-                    else
+                    if (testsCount == 0)
                     {
-                        break;
+                        testsCount = ConnectionSettings.GetTestsCount();
+                    }
+                    double interval = ConnectionSettings.GetInterval();
+
+                    webResourceTest = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId);
+
+                    IEnumerable<string> sUrls = this.tester.Reader.GetSitemapUrls(webResourceTest.WebResource.Url);
+
+                    this.UrlsFounded(connectionId, sUrls.Count());
+
+                    for (int i = 0; i < sUrls.Count(); i++)
+                    {
+                        if (!token.IsCancellationRequested)
+                        {
+                            string sUrl = sUrls.ElementAt(i);
+
+                            TesterTest test = this.tester.Analyzer.GetResult(sUrl, timeout, testsCount);
+
+                            bool saving = saver.SaveTestData(webResourceTest, test);
+
+                            if (saving)
+                            {
+                                this.TestFinished(connectionId, i + 1);
+                            }
+
+                            Task.Delay(Convert.ToInt32(interval * 1000)).Wait();
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
                 }
+                catch
+                {
+
+                }
+                this.TestDone(connectionId);
             }
         }
 
         public int Count(int testId)
         {
-            int testsCount = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId).Tests.Count();
-
-            return testsCount;
+            try
+            {
+                int testsCount = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId).Tests.Count();
+                return testsCount;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
     }

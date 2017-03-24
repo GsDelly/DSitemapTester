@@ -16,10 +16,13 @@
     <div class="box">
         <div class="box-body">
             <div class="input-group">
+                <div class="input-group-addon">
+                    <span class="input-link"></span>
+                </div>
+                <input id="lastUrl" type="text" class="form-control" disabled="disabled" value="">
                 <span class="input-group-btn">
-                    <button type="submit" class="btn btn-danger rounded" onclick="stopTest()">Stop Test</button>
+                    <button id="test-state" type="submit" class="btn btn-danger rounded" onclick="stopTest()">Stop Test</button>
                 </span>
-                <input id="lastUrl" type="text" class="form-control input-large" disabled="disabled" value="">
             </div>
         </div>
     </div>
@@ -74,8 +77,8 @@
         <div class="box-header with-border">
             <h2 style="text-align:center">WebResource : @Model.Url</h2>
 
-            @*<h4 style="text-align:center">Date: @Model.Tests.First().Date</h4>*@
-            @*<h4 style="text-align:center">Test is completed in @Model.Tests.First().Duration.ToString("0.00") seconds</h4>*@
+            <h3 id="test-date" style="text-align:center">Test date : </h3>
+            <h3 id="urls-count" style="text-align:center">Urls : </h3>
         </div>
         <div class="box-body">
             <table id="testResults" class="table table-hover table-bordered table-striped table-condensed"
@@ -109,14 +112,26 @@
         }
     </script>
 
+    @*window.onbeforeunload*@
+    <script>
+            window.onbeforeunload = unloadFunction;
+            function unloadFunction()
+            {
+                stopTest();
+            }
+    </script> 
+
     @*stopTest*@
     <script>
         function stopTest()
         {
             var id = $.connection.hub.id;
-            alert(id);
             $.post("@Url.Action("StopTest", "Test")",
-         {connectionId: id});
+         {connectionId: id})
+                .done(function() {
+                    $('#test-state').removeClass("btn-danger").addClass("btn-success");
+                    $('#test-state').prop('onclick', null).html('Done');
+                });
         }
     </script>
 
@@ -128,6 +143,13 @@
 
             hub.client.urlsFounded = function (urlsCount) {
                 stopLoadingAnimation();
+                document.getElementById("urls-count").innerHTML = "Urls : " + urlsCount;
+                document.getElementById("test-date").innerHTML = "Test Date : " + dateTime();
+            };
+
+            hub.client.testDone = function () {
+                $('#test-state').removeClass("btn-danger").addClass("btn-success");
+                $('#test-state').prop('onclick', null).html('Done');
             };
 
             hub.client.testFinished = function (urlsCount) {
@@ -144,34 +166,12 @@
         });
     </script>
 
-    @*buildTestResultsTable*@
-    <script>
-        function buildTestResultsTable() {
-            return $.extend( true, $.fn.dataTable.defaults, {
-                "processing": false,
-                "serverSide": true,
-                "filter": false,
-                "paging": true,
-                "ordering": true,
-                "order": [[3, 'desc']]
-            } );
-        };
-    </script>
-
     @*AppendData*@
     <script>
         function appendData(testId, urlsCount) {
             console.log(urlsCount);
 
             var testTable = $('#testResults').dataTable();;
-            //if(!$.fn.DataTable.isDataTable('#testResults'))
-            //{
-            //    testTable = $('#testResults').dataTable();
-            //}
-            //else
-            //{
-            //    testTable = $('#testResults').dataTable();
-            //}
 
             $.ajax ({
                 url: '/Test/LoadTestResults?testId=' + testId,
@@ -346,6 +346,23 @@
         function stopLoadingAnimation()
         {
             document.getElementById("loading").style.display = "none";
+        }
+    </script>
+    
+    @*dateTime*@
+    <script>
+        function dateTime()
+        {
+            var currentdate = new Date();
+            currentdata = Date.now; 
+            var datetime = currentdate.getDate() + "/"
+                            + (currentdate.getMonth()+1)  + "/" 
+                            + currentdate.getFullYear() + " - "  
+                            + currentdate.getHours() + ":"  
+                            + currentdate.getMinutes() + ":" 
+                            + currentdate.getSeconds();
+            console.log(datetime);
+            return datetime;
         }
     </script>
 }

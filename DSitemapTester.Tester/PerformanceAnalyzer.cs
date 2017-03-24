@@ -32,7 +32,7 @@ namespace DSitemapTester.Tester
             IList<TesterTestResult> testResults = new List<TesterTestResult>();
 
             TesterTest test = new TesterTest();
-            Trace.WriteLine(String.Format("New task created {0} url", url));
+
             for (int i = 0; i < testsCount; i++)
             {
                 tasks.Add(Task<TesterTestResult>.Factory.StartNew(() =>

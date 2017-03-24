@@ -56,13 +56,11 @@ namespace DSitemapTester.BLL.Services
 
                 this.dataUnit.SaveChanges();
 
-                Trace.WriteLine("Save changes done");
-
                 return webResourceTest;
             }
             catch
             {
-                return null;
+                throw;
             }
         }
 

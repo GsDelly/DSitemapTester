@@ -13,9 +13,11 @@ namespace DSitemapTester.BLL.Interfaces
     {
         Action<string, int> OnTestFinished { get; set; }
         Action<string, int> OnUrlsFounded { get; set; }
+        Action<string> OnTestDone { get; set; }
 
         void TestFinished(string connectionId, int urlsCount);
         void UrlsFounded(string connectionId, int totalUrlsCount);
+        void TestDone(string connectionId);
 
         PresentationWebResourceTestDto GetTest(int testId);
 

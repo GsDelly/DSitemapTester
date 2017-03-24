@@ -23,14 +23,6 @@ namespace DSitemapTester.BLL.Configuration
 
                 config.CreateMap<WebResourceTest, PresentationWebResourceTestDto>()
                 .ForMember(
-                         e => e.Date,
-                         opt => opt.MapFrom(
-                             res => res.Date))
-                //.ForMember(
-                //         e => e.Duration,
-                //         opt => opt.MapFrom(
-                //             res => Convert.ToDouble(res.Date.Ticks)))
-                .ForMember(
                          e => e.Tests,
                          opt => opt.MapFrom(
                              res => res.Tests));

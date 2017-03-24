@@ -9,21 +9,31 @@ namespace DSitemapTester.BLL.Entities
 {
     public static class Connections
     {
+        private static Object locker = new Object();
         private static Dictionary<string, CancellationTokenSource> tasks = new Dictionary<string, CancellationTokenSource>();
 
         public static void Add(string connectionId, CancellationTokenSource tokenSrc)
         {
-            tasks.Add(connectionId, tokenSrc);
+            lock (locker)
+            {
+                tasks.Add(connectionId, tokenSrc);
+            }
         }
 
         public static CancellationTokenSource GetToken(string connectionId)
         {
-            return tasks.Single(x => x.Key == connectionId).Value;
+            lock (locker)
+            {
+                return tasks.Single(x => x.Key == connectionId).Value;
+            }
         }
 
         public static void Remove(string connectionId)
         {
-            tasks.Remove(connectionId);
+            lock (locker)
+            {
+                tasks.Remove(connectionId);
+            }
         }
     }
 }

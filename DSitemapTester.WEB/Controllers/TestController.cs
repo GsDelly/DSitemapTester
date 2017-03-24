@@ -32,12 +32,17 @@ namespace DSitemapTester.Controllers
         public ActionResult Index(string selectedUrl, int timeout, int testsCount)
         {
             TestViewModel testModel = new TestViewModel();
-            
-            testModel.Url = selectedUrl;
-            testModel.TestId = this.testService.GetTestId(selectedUrl);
             testModel.Timeout = timeout;
             testModel.TestsCount = testsCount;
+            testModel.Url = selectedUrl;
+            try
+            {
+                testModel.TestId = this.testService.GetTestId(selectedUrl);
+            }
+            catch
+            {
 
+            }
             return View(testModel);
         }
 
@@ -51,32 +56,50 @@ namespace DSitemapTester.Controllers
             this.testHub.SendUrlsFoundedMessage(connectionId, urlsCount);
         }
 
+        public void TestDone(string connectionId)
+        {
+            this.testHub.SendTestDoneMessage(connectionId);
+        }
+
         [HttpPost]
         public ActionResult LoadTestResults(int testId = 0)
         {
-            string start = this.Request.Form.GetValues("start").FirstOrDefault();
-            //string draw = this.Request.Form.GetValues("draw").FirstOrDefault();
-            //string start = this.Request.Form.GetValues("start").FirstOrDefault();
+            PresentationWebResourceTestDto results = new PresentationWebResourceTestDto();
+            int recordsTotal;
+            try
+            {
+                string start = this.Request.Form.GetValues("start").FirstOrDefault();
 
-            int skip = start != null ? Convert.ToInt32(start) : 0;
-            int recordsTotal = this.testService.Count(testId);
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+                recordsTotal = this.testService.Count(testId);
 
-            PresentationWebResourceTestDto results = this.testService.GetTest(testId);
+                results = this.testService.GetTest(testId);
 
-            results.Tests = results.Tests
-                .Skip(skip)
-                .Take(1)
-                .ToList();
+                results.Tests = results.Tests
+                    .Skip(skip)
+                    .Take(1)
+                    .ToList();
+
+                return this.Json(
+                   new
+                   {
+                       recordsTotal = recordsTotal,
+                       data = results
+                   },
+                   JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                
+            }
 
             return this.Json(
-                new
-                {
-                    //draw = draw,
-                    //recordsFiltered = recordsTotal,
-                    recordsTotal = recordsTotal,
-                    data = results
-                },
-                JsonRequestBehavior.AllowGet);
+            new
+            {
+               recordsTotal = 0,
+               data = results
+            },
+            JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -84,27 +107,42 @@ namespace DSitemapTester.Controllers
         {
             this.testService.OnTestFinished += this.TestCompleted;
             this.testService.OnUrlsFounded += this.UrlsFounded;
+            this.testService.OnTestDone += this.TestDone;
 
-            Connections.Add(connectionId, cancelTokenSrc);
-
-            Task test = Task.Factory.StartNew(() =>
+            try
             {
-                this.testService.RunTest(testId, timeout, testsCount, this.cancelTokenSrc.Token, connectionId);
-            },
-            this.cancelTokenSrc.Token);
+                Connections.Add(connectionId, cancelTokenSrc);
 
-            test.Wait();
+                Task test = Task.Factory.StartNew(() =>
+                {
+                    this.testService.RunTest(testId, timeout, testsCount, this.cancelTokenSrc.Token, connectionId);
+                },
+                this.cancelTokenSrc.Token);
 
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+                test.Wait();
+
+                return new HttpStatusCodeResult(HttpStatusCode.OK);
+            }
+            catch
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Conflict);
+            }
         }
 
         [HttpPost]
         public ActionResult StopTest(string connectionId)
         {
-            Connections.GetToken(connectionId).Cancel();
-            Connections.Remove(connectionId);
+            try
+            {
+                Connections.GetToken(connectionId).Cancel();
+                Connections.Remove(connectionId);
 
-            return new HttpStatusCodeResult(HttpStatusCode.OK);  
+                return new HttpStatusCodeResult(HttpStatusCode.OK);
+            }
+            catch
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Conflict);
+            } 
         }
     }
 }
