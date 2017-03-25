@@ -28,7 +28,7 @@ namespace DSitemapTester.BLL.Services
             try
             {
                 var webResourceRepository = this.dataUnit.GetRepository<WebResource>();
-                IEnumerable <WebResource> resources = webResourceRepository.Get((x) => x.Url == url);
+                IEnumerable<WebResource> resources = webResourceRepository.Get((x) => x.Url == url);
                 WebResource resource;
 
                 if (resources.Any())

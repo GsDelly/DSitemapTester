@@ -23,11 +23,5 @@ namespace DSitemapTester.DAL.EFContext
         {
             return ConfigurationManager.ConnectionStrings[connectionName].ConnectionString;
         }
-
-        //public DbSet<Test> Tests { get; set; }
-
-        //public DbSet<SitemapResource> SitemapResources { get; set; }
-
-        //public DbSet<TestResult> TestResults { get; set; }
     }
 }

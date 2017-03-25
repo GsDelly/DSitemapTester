@@ -13,7 +13,7 @@ namespace DSitemapTester.Tester
         public IEnumerable<string> GetSitemapUrls(string url)
         {
             string sitemapUrl = url + "/sitemap.xml";
-            IList <string> urls = new List<string>();
+            IList<string> urls = new List<string>();
             try
             {
                 IEnumerable<XElement> childUrls = this.GetUrls(sitemapUrl);
@@ -96,7 +96,7 @@ namespace DSitemapTester.Tester
 
                 foreach (var childSitemap in childSitemaps)
                 {
-                    res.AddRange(GetUrls(GetLoc(childSitemap)));
+                    res.AddRange(this.GetUrls(this.GetLoc(childSitemap)));
                 }
 
                 XName urlName = XName.Get("url", sitemap.Name.NamespaceName);
