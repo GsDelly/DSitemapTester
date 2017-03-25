@@ -17,8 +17,8 @@ namespace DSitemapTester.Tester
             IList<string> urls = new List<string>();
             try
             {
-                IEnumerable<XElement> bottom_sitemaps = this.GetBottomSitemaps(url);
-                IEnumerable<TesterSitemap> sitemaps = this.GetSitemapEntities(bottom_sitemaps);
+                IEnumerable<XElement> childSitemaps = this.GetChildSitemaps(url);
+                IEnumerable<TesterSitemap> sitemaps = this.GetSitemapEntities(childSitemaps);
 
                 foreach (TesterSitemap sitemapUrl in sitemaps)
                 {
@@ -33,7 +33,7 @@ namespace DSitemapTester.Tester
             return urls;
         }
 
-        private IEnumerable<XElement> GetBottomSitemaps(string url)
+        private IEnumerable<XElement> GetChildSitemaps(string url)
         {
             this.url = url + "/sitemap.xml";
             try

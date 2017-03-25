@@ -32,7 +32,7 @@ namespace DSitemapTester.BLL.Services
         }
 
         public Action<string, int> OnTestFinished { get; set; }
-        public Action<string, int> OnUrlsFounded { get; set; }
+        public Action<string, int> OnUrlsFound { get; set; }
         public Action<string> OnTestDone { get; set; }
 
         public void TestDone(string connectionId)
@@ -46,9 +46,9 @@ namespace DSitemapTester.BLL.Services
             this.OnTestFinished(coonectionId, urlsCount);
         }
 
-        public void UrlsFounded(string coonectionId, int totalUrlsCount)
+        public void UrlsFound(string coonectionId, int totalUrlsCount)
         {
-            this.OnUrlsFounded(coonectionId, totalUrlsCount);
+            this.OnUrlsFound(coonectionId, totalUrlsCount);
         }
 
         public PresentationWebResourceTestDto GetTest(int testId)
@@ -92,59 +92,56 @@ namespace DSitemapTester.BLL.Services
             }
         }
 
-        public void RunTest(int testId,  int timeout, int testsCount, CancellationToken token, string connectionId)
+        public void RunTest(int testId, int timeout, int testsCount, CancellationToken token, string connectionId)
         {
-            if (!token.IsCancellationRequested)
+            WebResourceTest webResourceTest;
+            try
             {
-                WebResourceTest webResourceTest;
-                try
+                PresentationAutomapperConfig.Configure();
+                if (timeout == 0)
                 {
-                    PresentationAutomapperConfig.Configure();
-                    if (timeout == 0)
+                    timeout = ConnectionSettings.GetTimeout();
+                }
+                if (testsCount == 0)
+                {
+                    testsCount = ConnectionSettings.GetTestsCount();
+                }
+                double interval = ConnectionSettings.GetInterval();
+
+                webResourceTest = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId);
+
+                IEnumerable<string> urls = this.tester.Reader.GetSitemapUrls(webResourceTest.WebResource.Url);
+
+                this.UrlsFound(connectionId, urls.Count());
+
+                for (int i = 0; i < urls.Count(); i++)
+                {
+                    if (!token.IsCancellationRequested)
                     {
-                        timeout = ConnectionSettings.GetTimeout();
-                    }
-                    if (testsCount == 0)
-                    {
-                        testsCount = ConnectionSettings.GetTestsCount();
-                    }
-                    double interval = ConnectionSettings.GetInterval();
+                        string url = urls.ElementAt(i);
 
-                    webResourceTest = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId);
+                        TesterTest test = this.tester.Analyzer.GetResult(url, timeout, testsCount);
 
-                    IEnumerable<string> urls = this.tester.Reader.GetSitemapUrls(webResourceTest.WebResource.Url);
+                        bool saving = this.saver.SaveTestData(webResourceTest, test);
 
-                    this.UrlsFounded(connectionId, urls.Count());
-
-                    for (int i = 0; i < urls.Count(); i++)
-                    {
-                        if (!token.IsCancellationRequested)
+                        if (saving)
                         {
-                            string url = urls.ElementAt(i);
-
-                            TesterTest test = this.tester.Analyzer.GetResult(url, timeout, testsCount);
-
-                            bool saving = this.saver.SaveTestData(webResourceTest, test);
-
-                            if (saving)
-                            {
-                                this.TestFinished(connectionId, i + 1);
-                            }
-
-                            Task.Delay(Convert.ToInt32(interval * 1000)).Wait();
+                            this.TestFinished(connectionId, i + 1);
                         }
-                        else
-                        {
-                            break;
-                        }
+
+                        Task.Delay(Convert.ToInt32(interval * 1000)).Wait();
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
-                catch
-                {
-
-                }
-                this.TestDone(connectionId);
             }
+            catch
+            {
+
+            }
+            this.TestDone(connectionId);
         }
 
         public int Count(int testId)

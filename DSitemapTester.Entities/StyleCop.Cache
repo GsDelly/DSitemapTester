@@ -1,5 +1,8 @@
 <stylecopresultscache>
   <version>12</version>
+  <project key="164798094">
+    <configuration>DEBUG;TRACE</configuration>
+  </project>
   <sourcecode name="SitemapResource.cs" parser="StyleCop.CSharp.CsParser">
     <timestamps>
       <styleCop>2016.11.09 20:13:02.000</styleCop>
@@ -138,7 +141,4 @@
     </timestamps>
     <violations />
   </sourcecode>
-  <project key="164798094">
-    <configuration>DEBUG;TRACE</configuration>
-  </project>
 </stylecopresultscache>

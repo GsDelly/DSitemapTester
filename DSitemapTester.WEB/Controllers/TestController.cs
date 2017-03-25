@@ -51,7 +51,7 @@ namespace DSitemapTester.Controllers
             this.testHub.SendUpdateMessage(connectionId, urlsCount);
         }
 
-        public void UrlsFounded(string connectionId, int urlsCount)
+        public void UrlsFound(string connectionId, int urlsCount)
         {
             this.testHub.SendUrlsFoundedMessage(connectionId, urlsCount);
         }
@@ -106,7 +106,7 @@ namespace DSitemapTester.Controllers
         public ActionResult RunTest(int testId, int timeout, int testsCount, string connectionId)
         {
             this.testService.OnTestFinished += this.TestCompleted;
-            this.testService.OnUrlsFounded += this.UrlsFounded;
+            this.testService.OnUrlsFound += this.UrlsFound;
             this.testService.OnTestDone += this.TestDone;
 
             try

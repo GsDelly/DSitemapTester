@@ -1,5 +1,8 @@
 <stylecopresultscache>
   <version>12</version>
+  <project key="-1718484189">
+    <configuration>DEBUG;TRACE</configuration>
+  </project>
   <sourcecode name="ConnectionInstanceCollection.cs" parser="StyleCop.CSharp.CsParser">
     <timestamps>
       <styleCop>2016.11.09 20:13:02.000</styleCop>
@@ -345,11 +348,11 @@
     </timestamps>
     <violations />
   </sourcecode>
-  <sourcecode name="AssemblyInfo.cs" parser="StyleCop.CSharp.CsParser">
+  <sourcecode name="PerformanceAnalyzer.cs" parser="StyleCop.CSharp.CsParser">
     <timestamps>
       <styleCop>2016.11.09 20:13:02.000</styleCop>
       <settingsFile>2017.03.03 14:22:22.166</settingsFile>
-      <sourceFile>2017.03.03 14:27:41.715</sourceFile>
+      <sourceFile>2017.03.24 16:54:52.815</sourceFile>
       <parser>2016.11.09 20:13:02.000</parser>
       <StyleCop.CSharp.DocumentationRules>2016.11.09 20:13:02.000</StyleCop.CSharp.DocumentationRules>
       <StyleCop.CSharp.DocumentationRules.FilesHashCode>119483193</StyleCop.CSharp.DocumentationRules.FilesHashCode>
@@ -368,11 +371,11 @@
     </timestamps>
     <violations />
   </sourcecode>
-  <sourcecode name="PerformanceAnalyzer.cs" parser="StyleCop.CSharp.CsParser">
+  <sourcecode name="AssemblyInfo.cs" parser="StyleCop.CSharp.CsParser">
     <timestamps>
       <styleCop>2016.11.09 20:13:02.000</styleCop>
       <settingsFile>2017.03.03 14:22:22.166</settingsFile>
-      <sourceFile>2017.03.24 16:54:52.815</sourceFile>
+      <sourceFile>2017.03.03 14:27:41.715</sourceFile>
       <parser>2016.11.09 20:13:02.000</parser>
       <StyleCop.CSharp.DocumentationRules>2016.11.09 20:13:02.000</StyleCop.CSharp.DocumentationRules>
       <StyleCop.CSharp.DocumentationRules.FilesHashCode>119483193</StyleCop.CSharp.DocumentationRules.FilesHashCode>
@@ -437,7 +440,4 @@
     </timestamps>
     <violations />
   </sourcecode>
-  <project key="-1718484189">
-    <configuration>DEBUG;TRACE</configuration>
-  </project>
 </stylecopresultscache>
