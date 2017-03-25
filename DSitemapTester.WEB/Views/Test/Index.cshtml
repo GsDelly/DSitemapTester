@@ -140,9 +140,24 @@
         $(function () {
             var hub = $.connection.testHub;
 
-            hub.client.urlsFounded = function (urlsCount) {
+            hub.client.urlsFound = function (urlsCount) {
                 stopLoadingAnimation();
-                document.getElementById("urls-count").innerHTML = "Urls : " + urlsCount;
+                if (urlsCount>0)
+                {
+                    document.getElementById("urls-count").innerHTML = "Urls : " + urlsCount;
+                }
+                else
+                {
+                    document.getElementById("urls-count").style.color = "#ff0000";
+                    var errorMsg = "Web resource urls were not found. Make sure that your site has a sitemap. To do this, you can click on the link : ";
+                    var url = '@Model.Url';
+                    if (('@Model.Url.Last()') == '/')
+                    {
+                        url = url.substring(0, url.length - 1);
+                    }
+                    errorMsg += "<a href=" +  url + "/sitemap.xml>" +  url + '/sitemap.xml</a>';
+                    document.getElementById("urls-count").innerHTML = errorMsg;
+                }
                 document.getElementById("test-date").innerHTML = "Test Date : " + dateTime();
             };
 
