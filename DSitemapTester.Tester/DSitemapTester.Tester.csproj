@@ -49,10 +49,7 @@
     <Compile Include="Configuration\Connection\ConnectionInstanceElement.cs" />
     <Compile Include="Configuration\Connection\ConnectionSection.cs" />
     <Compile Include="Configuration\Connection\ConnectionSettings.cs" />
-    <Compile Include="Dtos\TestDto.cs" />
-    <Compile Include="Dtos\TestResultDto.cs" />
-    <Compile Include="Dtos\WebResourceDto.cs" />
-    <Compile Include="Entities\TesterSitemap.cs" />
+    <Compile Include="Entities\UrlInfo.cs" />
     <Compile Include="Entities\TesterTest.cs" />
     <Compile Include="Entities\TesterTestResult.cs" />
     <Compile Include="Enums\ConnectionStatus.cs" />

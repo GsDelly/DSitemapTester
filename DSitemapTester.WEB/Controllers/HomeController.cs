@@ -13,7 +13,7 @@ namespace DSitemapTester.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            return View();
+            return this.View();
         }
 
         [HttpPost]
@@ -25,7 +25,7 @@ namespace DSitemapTester.Controllers
             int timeout = Request.Form["timeout"] != string.Empty ? Convert.ToInt32(Request.Form["timeout"]) : 0;
             int testsCount = Request.Form["testsCount"] != string.Empty ? Convert.ToInt32(Request.Form["testsCount"]) : 0;
 
-            return RedirectToAction("Index", "Test", new { selectedUrl, timeout, testsCount });
+            return this.RedirectToAction("Index", "Test", new { selectedUrl, timeout, testsCount });
         }
     }
 }

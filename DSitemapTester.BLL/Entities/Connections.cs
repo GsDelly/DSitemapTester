@@ -9,7 +9,7 @@ namespace DSitemapTester.BLL.Entities
 {
     public static class Connections
     {
-        private static Object locker = new Object();
+        private static object locker = new object();
         private static Dictionary<string, CancellationTokenSource> tasks = new Dictionary<string, CancellationTokenSource>();
 
         public static void Add(string connectionId, CancellationTokenSource tokenSrc)
