@@ -7,7 +7,6 @@ using DSitemapTester.BLL.Utilities;
 using DSitemapTester.DAL.Interfaces;
 using DSitemapTester.Entities.Entities;
 using DSitemapTester.Tester.Configuration.Connection;
-using DSitemapTester.Tester.Dtos;
 using DSitemapTester.Tester.Entities;
 using DSitemapTester.Tester.Interfaces;
 using System;
