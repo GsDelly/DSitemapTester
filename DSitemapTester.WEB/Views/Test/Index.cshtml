@@ -138,12 +138,26 @@
     @*signalR*@
     <script>
         $(function () {
-            // Declare a proxy to reference the hub.
             var hub = $.connection.testHub;
 
-            hub.client.urlsFounded = function (urlsCount) {
+            hub.client.urlsFound = function (urlsCount) {
                 stopLoadingAnimation();
-                document.getElementById("urls-count").innerHTML = "Urls : " + urlsCount;
+                if (urlsCount>0)
+                {
+                    document.getElementById("urls-count").innerHTML = "Urls : " + urlsCount;
+                }
+                else
+                {
+                    document.getElementById("urls-count").style.color = "#ff0000";
+                    var errorMsg = "Web resource urls were not found. Make sure that your site has a sitemap. To do this, you can click on the link : ";
+                    var url = '@Model.Url';
+                    if (('@Model.Url.Last()') == '/')
+                    {
+                        url = url.substring(0, url.length - 1);
+                    }
+                    errorMsg += "<a href=" +  url + "/sitemap.xml>" +  url + '/sitemap.xml</a>';
+                    document.getElementById("urls-count").innerHTML = errorMsg;
+                }
                 document.getElementById("test-date").innerHTML = "Test Date : " + dateTime();
             };
 
@@ -157,7 +171,6 @@
                 appendData(id, urlsCount);
             };
 
-            // Start the connection.
             $.connection.hub.start(function () {
                 var id = $.connection.hub.id;
                 $.post("@Url.Action("RunTest","Test")",
@@ -169,9 +182,7 @@
     @*AppendData*@
     <script>
         function appendData(testId, urlsCount) {
-            console.log(urlsCount);
-
-            var testTable = $('#testResults').dataTable();;
+            var testTable = $('#testResults').dataTable();
 
             $.ajax ({
                 url: '/Test/LoadTestResults?testId=' + testId,
@@ -184,8 +195,6 @@
                 success: function(response)
                 {
                     var data = response.data;
-
-                    console.log(data)
 
                     appendTableData(testTable, data);
 
@@ -203,7 +212,6 @@
     <script type="text/javascript">
                 function renderLineChart(results)
                 {
-                    console.log('line');
                     google.charts.load('current', {'packages':['corechart']});
                     google.charts.setOnLoadCallback(drawUrlLineChart);
 
@@ -258,8 +266,8 @@
 
     @*AppendTableData*@
     <script>
-                function appendTableData(tableElement, data) {
-                    console.log('table');
+        function appendTableData(tableElement, data) {
+            var before = tableElement.fnSettings()._iDisplayStart;
                     for(var i = 0; i < data.Tests.length; i++)
                     {
                         tableElement.fnAddData([
@@ -272,13 +280,16 @@
 
                         tableElement.fnSort( [ [3,'desc'] ] );
                     }
+                    tableElement.fnSettings()._iDisplayStart = before;
+                    tableElement.fnSettings().oApi._fnCalculateEnd(tableElement.fnSettings());
+                    tableElement.fnSettings().oApi._fnDraw(tableElement.fnSettings());
                 }
     </script>
 
     @*RenderePieCharts*@
     <script>
                 function renderPieCharts(results) {
-                    console.log('pie');
+
                     google.charts.load('current', { 'packages': ['corechart'] });
                     google.charts.setOnLoadCallback(drawTotalChart);
                     google.charts.setOnLoadCallback(drawUrlChart);
@@ -361,7 +372,6 @@
                             + currentdate.getHours() + ":"  
                             + currentdate.getMinutes() + ":" 
                             + currentdate.getSeconds();
-            console.log(datetime);
             return datetime;
         }
     </script>

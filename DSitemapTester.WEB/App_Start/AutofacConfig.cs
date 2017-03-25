@@ -11,15 +11,12 @@ namespace DSitemapTester
         {
             var builder = new ContainerBuilder();
 
-            // Register Web Api controllers
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
 
-            // Configuring from BL
             BLL.Utilities.AutofacConfig.Configure(ref builder);
 
             var container = builder.Build();
 
-            // Setting the dependency resolver for MVC
             var mvcResolver = new AutofacDependencyResolver(container);
             DependencyResolver.SetResolver(mvcResolver);
         }

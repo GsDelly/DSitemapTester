@@ -59,7 +59,6 @@ namespace DSitemapTester.Tester
                     finally
                     {
                         result.ResponseTime = time;
-                        Trace.WriteLine(String.Format("Task finished {0} time ", time));
                     }
 
                     return result;

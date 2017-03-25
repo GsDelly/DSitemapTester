@@ -18,11 +18,11 @@ namespace DSitemapTester.Hubs
             context.Clients.Client(connectionId).testFinished(urlsCount);
         }
 
-        [HubMethodName("SendUrlsFoundedMessage")]
+        [HubMethodName("SendUrlsFoundMessage")]
         public void SendUrlsFoundedMessage(string connectionId, int totalUrlsCount)
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<TestHub>();
-            context.Clients.Client(connectionId).urlsFounded(totalUrlsCount);
+            context.Clients.Client(connectionId).urlsFound(totalUrlsCount);
         }
 
         [HubMethodName("SendTestDoneMessage")]

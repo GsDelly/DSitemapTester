@@ -3,7 +3,6 @@ using DSitemapTester.BLL.Configuration;
 using DSitemapTester.BLL.Interfaces;
 using DSitemapTester.DAL.Interfaces;
 using DSitemapTester.Entities.Entities;
-using DSitemapTester.Tester.Dtos;
 using DSitemapTester.Tester.Entities;
 using System;
 using System.Collections.Generic;
@@ -28,10 +27,11 @@ namespace DSitemapTester.BLL.Services
         {
             try
             {
-                IEnumerable<WebResource> resources = this.dataUnit.GetRepository<WebResource>().Get((x) => x.Url == url);
+                var webResourceRepository = this.dataUnit.GetRepository<WebResource>();
+                IEnumerable<WebResource> resources = webResourceRepository.Get((x) => x.Url == url);
                 WebResource resource;
 
-                if (resources.Count() > 0)
+                if (resources.Any())
                 {
                     resource = resources.First();
                 }
@@ -43,7 +43,7 @@ namespace DSitemapTester.BLL.Services
                         SitemapResources = new List<SitemapResource>(),
                         Tests = new List<WebResourceTest>()
                     };
-                    this.dataUnit.GetRepository<WebResource>().Insert(resource);
+                    webResourceRepository.Insert(resource);
                 }
 
                 WebResourceTest webResourceTest = new WebResourceTest()

@@ -6,6 +6,7 @@ namespace DSitemapTester.DAL.EFContext
 {
     public class SitemapContext : DbContext
     {
+
         public SitemapContext(string connectionName) : base(GetConnectionString(connectionName))
         {
             Database.SetInitializer(new SitemapDbInitializer());
@@ -16,17 +17,11 @@ namespace DSitemapTester.DAL.EFContext
 
         }
 
+        public DbSet<WebResource> WebResources { get; set; }
+
         private static string GetConnectionString(string connectionName)
         {
             return ConfigurationManager.ConnectionStrings[connectionName].ConnectionString;
         }
-
-        public DbSet<WebResource> WebResources { get; set; }
-
-        //public DbSet<Test> Tests { get; set; }
-
-        //public DbSet<SitemapResource> SitemapResources { get; set; }
-
-        //public DbSet<TestResult> TestResults { get; set; }
     }
 }
