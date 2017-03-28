@@ -1,0 +1,5 @@
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DataAccessInterfaces\bin\Release\DSitemapTester.DataAccessInterfaces.dll
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DataAccessInterfaces\bin\Release\DSitemapTester.DataAccessInterfaces.pdb
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DataAccessInterfaces\obj\Release\DSitemapTester.DAL.Interfaces.csprojResolveAssemblyReference.cache
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DataAccessInterfaces\obj\Release\DSitemapTester.DataAccessInterfaces.dll
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DataAccessInterfaces\obj\Release\DSitemapTester.DataAccessInterfaces.pdb

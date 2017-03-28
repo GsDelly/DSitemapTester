@@ -109,7 +109,9 @@ namespace DSitemapTester.BLL.Services
 
                 webResourceTest = this.dataUnit.GetRepository<WebResourceTest>().GetById(testId);
 
-                IEnumerable<string> urls = this.tester.Reader.GetSitemapUrls(webResourceTest.WebResource.Url);
+                string globalUrl = webResourceTest.WebResource.Url;
+
+                IEnumerable<string> urls = this.tester.Reader.GetSitemapUrls(globalUrl);
 
                 this.UrlsFound(connectionId, urls.Count());
 

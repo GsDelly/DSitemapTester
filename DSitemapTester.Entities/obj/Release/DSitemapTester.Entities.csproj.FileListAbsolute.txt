@@ -1,0 +1,5 @@
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Entities\bin\Release\DSitemapTester.Entities.dll
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Entities\bin\Release\DSitemapTester.Entities.pdb
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Entities\obj\Release\DSitemapTester.Entities.csprojResolveAssemblyReference.cache
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Entities\obj\Release\DSitemapTester.Entities.dll
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Entities\obj\Release\DSitemapTester.Entities.pdb

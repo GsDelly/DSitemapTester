@@ -16,6 +16,7 @@ namespace DSitemapTester.Tester
             IList<string> urls = new List<string>();
             try
             {
+                urls.Add(url);
                 IEnumerable<XElement> childUrls = this.GetUrls(sitemapUrl);
                 IEnumerable<UrlInfo> sitemaps = this.GetSitemapEntities(childUrls);
 
