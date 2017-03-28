@@ -1,0 +1,14 @@
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DAL\bin\Release\DSitemapTester.DAL.dll.config
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DAL\bin\Release\DSitemapTester.DAL.dll
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DAL\bin\Release\DSitemapTester.DAL.pdb
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DAL\bin\Release\DSitemapTester.DataAccessInterfaces.dll
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DAL\bin\Release\DSitemapTester.Entities.dll
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DAL\bin\Release\EntityFramework.dll
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DAL\bin\Release\EntityFramework.SqlServer.dll
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DAL\bin\Release\DSitemapTester.DataAccessInterfaces.pdb
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DAL\bin\Release\DSitemapTester.Entities.pdb
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DAL\bin\Release\EntityFramework.xml
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DAL\bin\Release\EntityFramework.SqlServer.xml
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DAL\obj\Release\DSitemapTester.DAL.csprojResolveAssemblyReference.cache
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DAL\obj\Release\DSitemapTester.DAL.dll
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.DAL\obj\Release\DSitemapTester.DAL.pdb

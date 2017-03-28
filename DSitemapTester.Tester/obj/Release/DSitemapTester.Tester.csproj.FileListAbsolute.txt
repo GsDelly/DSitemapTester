@@ -1,0 +1,9 @@
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Tester\bin\Release\DSitemapTester.Tester.dll
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Tester\bin\Release\DSitemapTester.Tester.pdb
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Tester\bin\Release\AutoMapper.dll
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Tester\bin\Release\DSitemapTester.Entities.dll
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Tester\bin\Release\DSitemapTester.Entities.pdb
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Tester\bin\Release\AutoMapper.xml
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Tester\obj\Release\DSitemapTester.Tester.csprojResolveAssemblyReference.cache
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Tester\obj\Release\DSitemapTester.Tester.dll
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Tester\obj\Release\DSitemapTester.Tester.pdb
