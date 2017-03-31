@@ -29,11 +29,12 @@ namespace DSitemapTester.Controllers
         }
 
         // GET: Test
-        public ActionResult Index(string selectedUrl, int timeout, int testsCount)
+        public ActionResult Index(string selectedUrl, int timeout, int testsCount, int dynamicMode)
         {
             TestViewModel testModel = new TestViewModel();
             testModel.Timeout = timeout;
             testModel.TestsCount = testsCount;
+            testModel.DynamicMode = dynamicMode;
             testModel.Url = selectedUrl;
             try
             {
@@ -103,11 +104,12 @@ namespace DSitemapTester.Controllers
         }
 
         [HttpPost]
-        public ActionResult RunTest(int testId, int timeout, int testsCount, string connectionId)
+        public ActionResult RunTest(int testId, int timeout, int testsCount, string connectionId, int dynamicMode)
         {
             this.testService.OnTestFinished += this.TestCompleted;
             this.testService.OnUrlsFound += this.UrlsFound;
             this.testService.OnTestDone += this.TestDone;
+            bool dynamic = Convert.ToBoolean(dynamicMode);
 
             try
             {
@@ -116,7 +118,7 @@ namespace DSitemapTester.Controllers
                 Task test = Task.Factory.StartNew(
                     () =>
                     {
-                        this.testService.RunTest(testId, timeout, testsCount, this.cancelTokenSrc.Token, connectionId);
+                        this.testService.RunTest(testId, timeout, testsCount, this.cancelTokenSrc.Token, connectionId, dynamic);
                     },
                     this.cancelTokenSrc.Token);
                 test.Wait();

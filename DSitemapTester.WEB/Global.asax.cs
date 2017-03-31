@@ -13,6 +13,7 @@ namespace DSitemapTester
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             AutofacConfig.Configure();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            DomainsConfig.RegisterDomains();
         }
     }
 }

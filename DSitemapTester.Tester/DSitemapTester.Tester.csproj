@@ -34,6 +34,10 @@
       <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -54,15 +58,26 @@
     <Compile Include="Entities\TesterTestResult.cs" />
     <Compile Include="Enums\ConnectionStatus.cs" />
     <Compile Include="Enums\Frequency.cs" />
+    <Compile Include="HtmlTester.cs" />
     <Compile Include="Interfaces\IPerformanceAnalyzer.cs" />
     <Compile Include="Interfaces\ISitemapReader.cs" />
     <Compile Include="Interfaces\ISitemapTester.cs" />
     <Compile Include="PerformanceAnalyzer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PublicSuffix\DomainParser\Domain.cs" />
+    <Compile Include="PublicSuffix\DomainParser\DomainParser.cs" />
+    <Compile Include="PublicSuffix\DomainParser\DomainsCache.cs" />
+    <Compile Include="PublicSuffix\RuleParser\DomainRule.cs" />
+    <Compile Include="PublicSuffix\RuleParser\DomainRuleParser.cs" />
+    <Compile Include="PublicSuffix\RuleParser\DomainRuleSection.cs" />
+    <Compile Include="PublicSuffix\RuleParser\DomainRuleType.cs" />
+    <Compile Include="PublicSuffix\RuleParser\PublicSuffixWebReader.cs" />
     <Compile Include="SitemapReader.cs" />
     <Compile Include="SitemapTester.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Utilities\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DSitemapTester.Entities\DSitemapTester.Entities.csproj">
       <Project>{A7EAC0BC-C653-4173-B566-4B1E70371D48}</Project>

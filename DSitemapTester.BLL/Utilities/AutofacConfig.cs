@@ -22,6 +22,7 @@ namespace DSitemapTester.BLL.Utilities
             builder.RegisterType<PerformanceAnalyzer>().As<IPerformanceAnalyzer>();
             builder.RegisterType<SitemapReader>().As<ISitemapReader>();
             builder.RegisterType<SitemapTester>().As<ISitemapTester>();
+
         }
     }
 }
