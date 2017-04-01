@@ -9,6 +9,7 @@
 @section styles {
     @Styles.Render("~/Content/DataTableStyles")
 }
+
 <html>
 <head>
 </head>
@@ -141,8 +142,11 @@
             var hub = $.connection.testHub;
 
             hub.client.urlsFound = function (urlsCount) {
-                stopLoadingAnimation();
-                
+                if (document.getElementById("loading").style.display != "none")
+                {
+                    stopLoadingAnimation();
+                }
+
                 document.getElementById("urls-count").innerHTML = "Urls : " + urlsCount;
                 
                 document.getElementById("test-date").innerHTML = "Test Date : " + dateTime();
@@ -155,21 +159,53 @@
 
             hub.client.testFinished = function (urlsCount) {
                 var id = @Model.TestId;
-                appendData(id, urlsCount);
+                if (urlsCount == 1)
+                {
+                    initDataTable();
+                    appendData(id, urlsCount);
+                }
+                else
+                {
+                    appendData(id, urlsCount);
+                }
             };
 
             $.connection.hub.start(function () {
                 var id = $.connection.hub.id;
                 $.post("@Url.Action("RunTest","Test")",
-               { testId : @Model.TestId, timeout: @Model.Timeout, testsCount: @Model.TestsCount, connectionId: id});
+               { testId : @Model.TestId, timeout: @Model.Timeout, testsCount: @Model.TestsCount, connectionId: id, dynamicMode: '@Model.DynamicMode'});
             });
         });
+    </script>
+
+    @*initSpecificDataTable*@
+    <script>
+        function initSpecificDataTable(options) {
+
+            var table = $('#testResults').dataTable(options);
+       
+            return table;
+        };
+    </script>
+
+    @*initDataTable*@
+    <script>
+        function initDataTable()
+        {
+            var table = initSpecificDataTable({
+                "processing": false,
+                "filter": false,
+                "orderMulti": false,
+                "order": [ 3, 'desc' ],
+                "autoWidth": true
+            });
+        }
     </script>
 
     @*AppendData*@
     <script>
         function appendData(testId, urlsCount) {
-            var testTable = $('#testResults').dataTable();
+              var testTable = $('#testResults').dataTable();
 
             $.ajax ({
                 url: '/Test/LoadTestResults?testId=' + testId,
@@ -255,6 +291,7 @@
     @*AppendTableData*@
     <script>
         function appendTableData(tableElement, data) {
+
             var before = tableElement.fnSettings()._iDisplayStart;
                     for(var i = 0; i < data.Tests.length; i++)
                     {
@@ -266,7 +303,7 @@
                                 data.Tests[i].TestsCount,
                         ]);
 
-                        tableElement.fnSort( [ [3,'desc'] ] );
+                        //tableElement.fnSort( [ [3,'desc'] ] );
                     }
                     tableElement.fnSettings()._iDisplayStart = before;
                     tableElement.fnSettings().oApi._fnCalculateEnd(tableElement.fnSettings());

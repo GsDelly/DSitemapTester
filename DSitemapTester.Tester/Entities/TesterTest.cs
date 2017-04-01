@@ -11,6 +11,6 @@ namespace DSitemapTester.Tester.Entities
 
         public int TestsCount { get; set; }
 
-        public IEnumerable<TesterTestResult> TestResults { get; set; }
+        public IList<TesterTestResult> TestResults { get; set; }
     }
 }

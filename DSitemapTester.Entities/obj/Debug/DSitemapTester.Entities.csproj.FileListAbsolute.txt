@@ -3,3 +3,8 @@ D:\Work\UkadGroup\DSitemapTester\DSitemapTester.Entities\bin\Debug\DSitemapTeste
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.Entities\obj\Debug\DSitemapTester.Entities.csprojResolveAssemblyReference.cache
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.Entities\obj\Debug\DSitemapTester.Entities.dll
 D:\Work\UkadGroup\DSitemapTester\DSitemapTester.Entities\obj\Debug\DSitemapTester.Entities.pdb
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Entities\bin\Debug\DSitemapTester.Entities.dll
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Entities\bin\Debug\DSitemapTester.Entities.pdb
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Entities\obj\Debug\DSitemapTester.Entities.csprojResolveAssemblyReference.cache
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Entities\obj\Debug\DSitemapTester.Entities.dll
+D:\Work\UkadGroup\MasterDSitemap\DSitemapTester.Entities\obj\Debug\DSitemapTester.Entities.pdb

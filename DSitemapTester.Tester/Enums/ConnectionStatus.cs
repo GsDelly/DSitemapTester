@@ -11,5 +11,6 @@ namespace DSitemapTester.Tester.Enums
         Connected,
         Disconnected,
         DisconnectedByTimeout,
+        UrlIsNotSupported,
     }
 }

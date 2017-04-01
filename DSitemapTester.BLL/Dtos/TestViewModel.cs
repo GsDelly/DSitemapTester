@@ -15,5 +15,7 @@ namespace DSitemapTester.BLL.Dtos
         public int Timeout { get; set; }
 
         public int TestsCount { get; set; }
+
+        public int DynamicMode { get; set; }
     }
 }
