@@ -119,14 +119,12 @@ namespace DSitemapTester.BLL.Services
                 {
                     IEnumerable<string> urls = this.tester.Reader.GetSitemapUrls(globalUrl);
 
-                    //change ! to ''
-                    if (urls.Any())
+                    if (urls.Count() > 1)
                     {
                         this.RunSitemapTest(webResourceTest, urls, timeout, testsCount, interval, token, connectionId);
                     }
                     else
                     {
-                        //code for htmltester
                         this.RunHtmlTest(webResourceTest, timeout, interval, testsCount, token, connectionId);
                     }
                 }
