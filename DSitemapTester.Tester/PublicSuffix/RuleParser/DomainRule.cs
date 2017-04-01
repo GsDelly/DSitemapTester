@@ -42,7 +42,7 @@ namespace DSitemapTester.Tester.PublicSuffix.RuleParser
             {
                 this.Type = DomainRuleType.WildcardException;
                 this.Name = ruleData.Substring(1).ToLower();
-                this.LabelCount = parts.Count - 1; //Left-most label is removed for Wildcard Exceptions
+                this.LabelCount = parts.Count - 1;
             }
             else if (ruleData.Contains("*"))
             {
