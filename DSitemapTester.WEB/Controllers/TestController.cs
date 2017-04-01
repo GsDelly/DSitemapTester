@@ -138,7 +138,7 @@ namespace DSitemapTester.Controllers
             {
                 Connections.GetToken(connectionId).Cancel();
                 Connections.Remove(connectionId);
-
+                Trace.WriteLine("______________STOPPED____________");
                 return new HttpStatusCodeResult(HttpStatusCode.OK);
             }
             catch

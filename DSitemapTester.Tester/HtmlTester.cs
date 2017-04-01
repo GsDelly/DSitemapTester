@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DSitemapTester.Tester
@@ -16,7 +17,7 @@ namespace DSitemapTester.Tester
     {
         private DomainParser domainParser = new DomainParser();
 
-        public IList<string> GetUrls(string url, Domain domain, int testCount, out IList<double> responseTimes, out DateTime responseDate)
+        public IList<string> GetUrls(string url, Domain domain, int testCount, CancellationToken token, out IList<double> responseTimes, out DateTime responseDate)
         {
             string html = string.Empty;
 
@@ -26,7 +27,7 @@ namespace DSitemapTester.Tester
             double responseTime;
             DateTime date = DateTime.Now;
 
-            while (times.Count() != testCount && !urls.Any())
+            while (times.Count() != testCount && !urls.Any() && !token.IsCancellationRequested)
             {
                 try
                 {
@@ -41,7 +42,7 @@ namespace DSitemapTester.Tester
                         HtmlAttribute href = link.Attributes["href"];
                         urls.Add(href.Value);
                     }
-                    urls = this.GetInnerLinks(url, urls, domain);
+                    urls = this.GetInnerLinks(url, urls, domain , token);
                 }
                 catch
                 {
@@ -56,48 +57,55 @@ namespace DSitemapTester.Tester
             return urls;
         }
 
-        private IList<string> GetInnerLinks(string outerUrl, IList<string> urls, Domain domain)
+        private IList<string> GetInnerLinks(string outerUrl, IList<string> urls, Domain domain, CancellationToken token)
         {
             IList<string> innerLinks = new List<string>();
 
             for (int i = 0;  i < urls.Count(); i++)
             {
-                string innerLink = string.Empty;
-                string url = urls.ElementAt(i);
-
-                try
+                if (!token.IsCancellationRequested)
                 {
-                    Uri sitemapUri = new Uri(url);
-                    Domain innerUrlDomain = this.GetUrlDomain(sitemapUri);
+                    string innerLink = string.Empty;
+                    string url = urls.ElementAt(i);
 
-                    if (innerUrlDomain.Name == domain.Name)
+                    try
                     {
-                        if (innerUrlDomain.Tld == domain.Tld)
+                        Uri sitemapUri = new Uri(url);
+                        if (sitemapUri.Scheme.Contains("http"))
                         {
-                            innerLink = sitemapUri.AbsoluteUri;
+                            Domain innerUrlDomain = this.GetUrlDomain(sitemapUri);
+
+                            if ((innerUrlDomain.Name == domain.Name) && (innerUrlDomain.Tld == domain.Tld))
+                            {
+                                innerLink = sitemapUri.AbsoluteUri;
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        if ((url.Any()) && (url.First().Equals('/')))
+                        {
+                            Uri uri = new Uri(outerUrl);
+                            innerLink = uri.Scheme + "://" + uri.Host + url;
+                        }
+                    }
+
+                    if (!String.IsNullOrEmpty(innerLink))
+                    {
+                        if (innerLink.Last() == '/')
+                        {
+                            innerLink = innerLink.Remove(innerLink.Length - 1);
+                        }
+                        if (!innerLinks.Contains(innerLink))
+                        {
+                            innerLinks.Add(innerLink);
                         }
                     }
                 }
-                catch
+                else
                 {
-                    if ((url.Any()) && (url.First().Equals('/')))
-                    {
-                        Uri uri = new Uri(outerUrl);
-                        innerLink = uri.Scheme + "://" + uri.Host + url;
-                    }
-                }
-
-                if (!String.IsNullOrEmpty(innerLink))
-                {
-                    if (innerLink.Last() == '/')
-                    {
-                        innerLink = innerLink.Remove(innerLink.Length - 1);
-                    }
-                    if (!innerLinks.Contains(innerLink))
-                    {
-                        innerLinks.Add(innerLink);
-                    }
-                }              
+                    break;
+                }           
             }
             return innerLinks;
         }

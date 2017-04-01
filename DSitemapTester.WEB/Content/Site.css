@@ -53,3 +53,8 @@ th {
    background: #f7c255; 
    font-size : 16px; 
 }
+
+table.dataTable tbody td {
+    word-break: break-word;
+    vertical-align: top;
+}
