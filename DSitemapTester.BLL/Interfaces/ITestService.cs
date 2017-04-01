@@ -21,7 +21,7 @@ namespace DSitemapTester.BLL.Interfaces
 
         PresentationWebResourceTestDto GetTest(int testId);
 
-        void RunTest(int testId, int timeout, int testsCount, CancellationToken token, string connectionId);
+        void RunTest(int testId, int timeout, int testsCount, CancellationToken token, string connectionId, bool dynamicMode);
 
         int GetTestId(string url);
 

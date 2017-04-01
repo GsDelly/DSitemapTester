@@ -56,6 +56,14 @@ namespace DSitemapTester.Tester
                             result.Status = ConnectionStatus.Disconnected;
                         }
                     }
+                    catch (NotSupportedException nse)
+                    {
+                        result.Status = ConnectionStatus.UrlIsNotSupported;
+                    }
+                    catch
+                    {
+                        result.Status = ConnectionStatus.Disconnected;
+                    }
                     finally
                     {
                         result.ResponseTime = time;
@@ -78,15 +86,15 @@ namespace DSitemapTester.Tester
 
         private double GetConnectionTime(string url, int timeout)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Timeout = timeout * 1000;
-
             Stopwatch timer = new Stopwatch();
             timer.Start();
-
             try
             {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                request.Timeout = timeout * 1000;
+
                 HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                response.Close();
             }
             catch
             {

@@ -1,0 +1,11 @@
+D:\Work\UkadGroup\MasterDSitemap\TestApp\bin\Debug\TestApp.exe.config
+D:\Work\UkadGroup\MasterDSitemap\TestApp\bin\Debug\TestApp.exe
+D:\Work\UkadGroup\MasterDSitemap\TestApp\bin\Debug\TestApp.pdb
+D:\Work\UkadGroup\MasterDSitemap\TestApp\bin\Debug\DSitemapTester.Tester.dll
+D:\Work\UkadGroup\MasterDSitemap\TestApp\bin\Debug\HtmlAgilityPack.dll
+D:\Work\UkadGroup\MasterDSitemap\TestApp\bin\Debug\DSitemapTester.Tester.pdb
+D:\Work\UkadGroup\MasterDSitemap\TestApp\bin\Debug\HtmlAgilityPack.pdb
+D:\Work\UkadGroup\MasterDSitemap\TestApp\bin\Debug\HtmlAgilityPack.xml
+D:\Work\UkadGroup\MasterDSitemap\TestApp\obj\Debug\TestApp.csprojResolveAssemblyReference.cache
+D:\Work\UkadGroup\MasterDSitemap\TestApp\obj\Debug\TestApp.exe
+D:\Work\UkadGroup\MasterDSitemap\TestApp\obj\Debug\TestApp.pdb
