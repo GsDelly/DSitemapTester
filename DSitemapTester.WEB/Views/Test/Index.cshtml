@@ -82,7 +82,7 @@
             <h3 id="urls-count" style="text-align:center">Urls : </h3>
         </div>
         <div class="box-body">
-            <table id="testResults" class="table table-hover table-bordered table-striped table-condensed"
+            <table id="testResults" class="table table-hover table-bordered table-striped table-condensed table-responsive"
                    cellspacing="1">
                 <thead>
                     <tr>
@@ -197,7 +197,14 @@
                 "filter": false,
                 "orderMulti": false,
                 "order": [ 3, 'desc' ],
-                "autoWidth": true
+                "autoWidth": false,
+                "columns" : [
+                    { width: '60%' },
+                    { width: '10%' },
+                    { width: '10%' },
+                    { width: '10%' },
+                    { width: '10%' },
+                ]
             });
         }
     </script>

@@ -200,43 +200,50 @@ namespace DSitemapTester.BLL.Services
 
             foreach (var url in urlsForTest)
             {
-                if (!token.IsCancellationRequested)
+                if (token.IsCancellationRequested)
                 {
-                    elementUrls = htmlTester.GetUrls(url, domain, testsCount, out responseTimes, out responseDate);
-                    
-                    foreach (string elementUrl in elementUrls)
+                    break;
+                }
+
+                elementUrls = htmlTester.GetUrls(url, domain, testsCount, token, out responseTimes, out responseDate);
+
+                if (token.IsCancellationRequested)
+                {
+                    break;
+                }
+
+                foreach (string elementUrl in elementUrls)
+                {
+                    if (!testedUrls.Contains(elementUrl) && !urlsForTest.Contains(elementUrl) && !urls.Contains(elementUrl))
                     {
-                        if (!testedUrls.Contains(elementUrl) && !urlsForTest.Contains(elementUrl) && !urls.Contains(elementUrl))
-                        {
-                            urls.Add(elementUrl);
-                        }
+                        urls.Add(elementUrl);
+                    }
+                }
+
+                if (!testedUrls.Contains(url))
+                {
+                    TesterTest test = this.tester.Analyzer.GetResult(url, timeout, testsCount - responseTimes.Count());
+                    for (int i = responseTimes.Count() - 1; i >= 0; i--)
+                    {
+                        test.TestsCount++;
+                        test.TestResults.Insert(0, new TesterTestResult() { ResponseTime = responseTimes.ElementAt(i) });
+                    }
+                    test.Date = responseDate;
+                    bool saving = this.saver.SaveTestData(webResourceTest, test);
+
+                    if (saving)
+                    {
+                        this.TestFinished(connectionId, testedUrls.Count + 1);
                     }
 
-                    if (!testedUrls.Contains(url))
-                    {
-                        TesterTest test = this.tester.Analyzer.GetResult(url, timeout, testsCount - responseTimes.Count());
-                        for (int i = responseTimes.Count() - 1; i >= 0;  i--)
-                        {
-                            test.TestsCount++;
-                            test.TestResults.Insert(0, new TesterTestResult() { ResponseTime = responseTimes.ElementAt(i)});
-                        }
-                        test.Date = responseDate;
-                        bool saving = this.saver.SaveTestData(webResourceTest, test);
+                    testedUrls.Add(url);
 
-                        if (saving)
-                        {
-                            this.TestFinished(connectionId, testedUrls.Count + 1);
-                        }
-
-                        testedUrls.Add(url);
-
-                        Task.Delay(Convert.ToInt32(interval * 1000)).Wait();
-                    }
+                    Task.Delay(Convert.ToInt32(interval * 1000)).Wait();
                 }
             }
 
             return urls;
-        } 
+        }
 
         public int Count(int testId)
         {
